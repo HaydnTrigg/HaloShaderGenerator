@@ -1,1 +1,1 @@
-# HaloLauncher
+# Halo Shader Template Generator
