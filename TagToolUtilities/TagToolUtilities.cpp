@@ -87,7 +87,7 @@ bool TagTool::Utilities::DirectXUtilities::CompilePCShader(String ^ _SrcData, ar
 
 	HRESULT result = D3DXCompileShader(
 		SrcData.data(),
-		SrcData.size(),
+		(UINT)SrcData.size(),
 		macros,
 		nullptr,
 		FunctionName.c_str(),
@@ -98,7 +98,7 @@ bool TagTool::Utilities::DirectXUtilities::CompilePCShader(String ^ _SrcData, ar
 		&constanttable);
 
 	List<Byte>^ data = gcnew List<Byte>();
-	for (auto i = 0; i < shader->GetBufferSize(); i++) {
+	for (DWORD i = 0; i < shader->GetBufferSize(); i++) {
 		auto val = reinterpret_cast<unsigned char*>(shader->GetBufferPointer())[i];
 		data->Add(val);
 	}
