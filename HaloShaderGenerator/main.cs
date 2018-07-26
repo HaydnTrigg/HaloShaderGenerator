@@ -9,9 +9,10 @@ namespace HaloShaderGenerator
 {
     class Application
     {
-        static void Main()
+        static int Main()
         {
-            ShaderGenerator.GenerateSource("shader_template.hlsl");
+            byte[] source = ShaderGenerator.GenerateSource();
+            return source.Length;
         }
     }
 }
