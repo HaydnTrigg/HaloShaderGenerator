@@ -42,9 +42,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pixel.hlsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="shader_code\albedo\chameleon_albedo_masked.hlsl" />
     <EmbeddedResource Include="shader_code\albedo\two_change_color_tex_overlay.hlsl" />
     <EmbeddedResource Include="shader_code\albedo\chameleon.hlsl" />
@@ -120,15 +117,17 @@
     <EmbeddedResource Include="shader_code\specular_mask\specular_mask_from_texture.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectX\D3D.cs" />
+    <Compile Include="DirectX\D3DCompiler.cs" />
+    <Compile Include="DirectX\Include.cs" />
+    <Compile Include="Enums\Albedo.cs" />
     <Compile Include="main.cs" />
     <Compile Include="ShaderGenerator.cs" />
+    <Compile Include="ShaderGeneratorBase.cs" />
     <Compile Include="ShaderGenerator_Enums.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TagToolUtilities\TagToolUtilities.vcxproj">
-      <Project>{c26e8204-0025-4484-955e-a669425fe9d7}</Project>
-      <Name>TagToolUtilities</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="shader_code\shader_template.hlsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

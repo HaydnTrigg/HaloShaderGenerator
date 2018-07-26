@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HaloShaderGenerator
 {
-    class Application
+    public class ShaderGeneratorBase
     {
-        static void Main()
-        {
-            ShaderGenerator.GenerateSource("shader_template.hlsl");
-        }
+
     }
 }
