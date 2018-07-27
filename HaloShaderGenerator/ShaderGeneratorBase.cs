@@ -14,7 +14,7 @@ namespace HaloShaderGenerator
         private class IncludeManager : Include
         {
 
-            public IncludeManager(string root_directory) : base(root_directory)
+            public IncludeManager(string root_directory = "") : base(root_directory)
             {
 
             }
@@ -24,15 +24,22 @@ namespace HaloShaderGenerator
                 string parent_directory = _parent_directory ?? base.DirectoryMap[IntPtr.Zero];
                 var assembly = Assembly.GetExecutingAssembly();
 
-                string path = System.IO.Path.Combine(parent_directory, filepath);
+                string relative_path = Path.Combine(parent_directory, filepath);
+                string path = Path.Combine("HaloShaderGenerator\\shader_code", relative_path);
                 string directory = Path.GetDirectoryName(path);
 
                 var resourceName = path.Replace('\\', '.');
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-                using (StreamReader reader = new StreamReader(stream))
                 {
-                    return reader.ReadToEnd();
+                    if(stream == null)
+                    {
+                        throw new Exception($"Couldn't find file {relative_path}");
+                    }
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
             }
 
@@ -52,10 +59,9 @@ namespace HaloShaderGenerator
             }
         }
 
-        public static byte[] GenerateSource(string template, D3D.SHADER_MACRO[] macros)
+        public static byte[] GenerateSource(string template, IEnumerable<D3D.SHADER_MACRO> macros)
         {
-            string root_path = "HaloShaderGenerator\\shader_code";
-            IncludeManager include = new IncludeManager(root_path);
+            IncludeManager include = new IncludeManager();
 
             string shader_source = include.ReadResource(template);
 
@@ -63,10 +69,10 @@ namespace HaloShaderGenerator
                 shader_source,
                 "main",
                 "ps_3_0",
-                macros,
+                macros.ToArray(),
                 0,
                 0,
-                Path.Combine(root_path, template),
+                template,
                 include
             );
 

@@ -121,6 +121,7 @@
     <Compile Include="DirectX\D3DCompiler.cs" />
     <Compile Include="DirectX\Include.cs" />
     <Compile Include="Enums\Albedo.cs" />
+    <Compile Include="Enums\ShaderStage.cs" />
     <Compile Include="main.cs" />
     <Compile Include="ShaderGenerator.cs" />
     <Compile Include="ShaderGeneratorBase.cs" />

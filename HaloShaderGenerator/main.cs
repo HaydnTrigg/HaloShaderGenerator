@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HaloShaderGenerator.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace HaloShaderGenerator
     {
         static int Main()
         {
-            byte[] source = ShaderGenerator.GenerateSource();
+            byte[] shader_bytecode = ShaderGenerator.GenerateSource(ShaderStage.Default, Albedo.Two_Change_Color);
+            byte[] shader_bytecode = ContrailGenerator.GenerateSource(ShaderStage.Default, Albedo.Two_Change_Color);
             return source.Length;
         }
     }

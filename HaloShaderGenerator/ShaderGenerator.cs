@@ -25,7 +25,7 @@ namespace HaloShaderGenerator
             Soft_fade soft_fade
             )
         {
-
+            
 
 
 
@@ -42,11 +42,41 @@ namespace HaloShaderGenerator
 
         }
 
-        public static byte[] GenerateSource()
+        public static byte[] GenerateSource(ShaderStage stage)
         {
+            string template = $"{stage.ToString().ToLower()}_template.hlsl";
+
             D3D.SHADER_MACRO[] macros = { new D3D.SHADER_MACRO { Name = "test\0", Definition = "1.0\0" } };
 
-            return ShaderGeneratorBase.GenerateSource("shader_template.hlsl", macros);
+            switch (stage)
+            {
+                case ShaderStage.Default:
+                    break;
+                case ShaderStage.Albedo:
+                case ShaderStage.Static_Default:
+                case ShaderStage.Static_Per_Pixel:
+                case ShaderStage.Static_Per_Vertex:
+                case ShaderStage.Static_Sh:
+                case ShaderStage.Static_Prt_Ambient:
+                case ShaderStage.Static_Prt_Linear:
+                case ShaderStage.Static_Prt_Quadratic:
+                case ShaderStage.Dynamic_Light:
+                case ShaderStage.Shadow_Generate:
+                case ShaderStage.Shadow_Apply:
+                case ShaderStage.Active_Camo:
+                case ShaderStage.Lightmap_Debug_Mode:
+                case ShaderStage.Static_Per_Vertex_Color:
+                case ShaderStage.Water_Tesselation:
+                case ShaderStage.Water_Shading:
+                case ShaderStage.Dynamic_Light_Cinematic:
+                case ShaderStage.Z_Only:
+                case ShaderStage.Sfx_Distort:
+                default:
+                    return null;
+            }
+
+            var shader_bytecode = ShaderGeneratorBase.GenerateSource(template, macros);
+            return shader_bytecode;
         }
     }
 }
