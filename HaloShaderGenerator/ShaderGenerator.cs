@@ -42,7 +42,7 @@ namespace HaloShaderGenerator
 
         }
 
-        public static byte[] GenerateSource(ShaderStage stage)
+        public static byte[] GenerateSource(ShaderStage stage, params object[] args)
         {
             string template = $"{stage.ToString().ToLower()}_template.hlsl";
 

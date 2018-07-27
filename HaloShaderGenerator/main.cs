@@ -13,8 +13,7 @@ namespace HaloShaderGenerator
         static int Main()
         {
             byte[] shader_bytecode = ShaderGenerator.GenerateSource(ShaderStage.Default, Albedo.Two_Change_Color);
-            byte[] shader_bytecode = ContrailGenerator.GenerateSource(ShaderStage.Default, Albedo.Two_Change_Color);
-            return source.Length;
+            return shader_bytecode.Length;
         }
     }
 }
