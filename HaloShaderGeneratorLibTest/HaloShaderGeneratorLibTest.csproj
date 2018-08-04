@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC8C6886-E1C0-41D6-AD74-A194CA0D841A}</ProjectGuid>
+    <ProjectGuid>{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>HaloShaderGenerator</RootNamespace>
-    <AssemblyName>HaloShaderGeneratorTest</AssemblyName>
+    <RootNamespace>HaloShaderGeneratorLibTest</RootNamespace>
+    <AssemblyName>HaloShaderGeneratorLibTest</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,14 +53,10 @@
       <Project>{ac09cce8-ca0b-403a-9d9d-6eb56fab289c}</Project>
       <Name>HaloShaderGeneratorLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HaloShaderGenerator\HaloShaderGenerator.csproj">
-      <Project>{17bfeffb-1619-4647-ba40-3cd1d87fd774}</Project>
-      <Name>HaloShaderGenerator</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cd $(SolutionDir)
+xcopy HaloShaderGenerator\bin\$(ConfigurationName)\HaloShaderGenerator.dll HaloShaderGeneratorTest\bin\$(ConfigurationName)\ /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

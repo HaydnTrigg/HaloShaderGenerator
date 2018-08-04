@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaloShaderGeneratorTest", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaloShaderGeneratorLib", "HaloShaderGeneratorLib\HaloShaderGeneratorLib.csproj", "{AC09CCE8-CA0B-403A-9D9D-6EB56FAB289C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaloShaderGeneratorLibTest", "HaloShaderGeneratorLibTest\HaloShaderGeneratorLibTest.csproj", "{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FakeLibrary", "FakeLibrary", "{C37F4CD2-72AE-4513-8E67-C8B4FB59BCF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,9 +62,25 @@ Global
 		{AC09CCE8-CA0B-403A-9D9D-6EB56FAB289C}.Release|x64.Build.0 = Release|Any CPU
 		{AC09CCE8-CA0B-403A-9D9D-6EB56FAB289C}.Release|x86.ActiveCfg = Release|Any CPU
 		{AC09CCE8-CA0B-403A-9D9D-6EB56FAB289C}.Release|x86.Build.0 = Release|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Debug|x64.Build.0 = Debug|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Debug|x86.Build.0 = Debug|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Release|x64.ActiveCfg = Release|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Release|x64.Build.0 = Release|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Release|x86.ActiveCfg = Release|Any CPU
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC09CCE8-CA0B-403A-9D9D-6EB56FAB289C} = {C37F4CD2-72AE-4513-8E67-C8B4FB59BCF2}
+		{2742DD44-86FD-42AE-B5E1-914DDF2C6D45} = {C37F4CD2-72AE-4513-8E67-C8B4FB59BCF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27441D28-D38D-42A8-A775-0C7ADA9564DB}

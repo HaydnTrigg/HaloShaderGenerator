@@ -17,7 +17,6 @@ namespace HaloShaderGenerator
             {
                 //case ShaderStage.Default:
                 case ShaderStage.Albedo:
-                //case ShaderStage.Static_Default:
                 //case ShaderStage.Static_Per_Pixel:
                 //case ShaderStage.Static_Per_Vertex:
                 //case ShaderStage.Static_Sh:
@@ -26,19 +25,16 @@ namespace HaloShaderGenerator
                 //case ShaderStage.Static_Prt_Quadratic:
                 //case ShaderStage.Dynamic_Light:
                 //case ShaderStage.Shadow_Generate:
-                //case ShaderStage.Shadow_Apply:
-                //case ShaderStage.Active_Camo:
+                case ShaderStage.Active_Camo:
                 //case ShaderStage.Lightmap_Debug_Mode:
                 //case ShaderStage.Static_Per_Vertex_Color:
-                //case ShaderStage.Water_Tesselation:
-                //case ShaderStage.Water_Shading:
                 //case ShaderStage.Dynamic_Light_Cinematic:
-                //case ShaderStage.Z_Only:
                 //case ShaderStage.Sfx_Distort:
                     return true;
             }
             return false;
         }
+
         public static Task<byte[]> GenerateAsync(
             ShaderStage stage,
             Albedo albedo,
@@ -96,8 +92,6 @@ namespace HaloShaderGenerator
             {
                 //case ShaderStage.Default:
                 case ShaderStage.Albedo:
-                    break;
-                //case ShaderStage.Static_Default:
                 //case ShaderStage.Static_Per_Pixel:
                 //case ShaderStage.Static_Per_Vertex:
                 //case ShaderStage.Static_Sh:
@@ -106,15 +100,12 @@ namespace HaloShaderGenerator
                 //case ShaderStage.Static_Prt_Quadratic:
                 //case ShaderStage.Dynamic_Light:
                 //case ShaderStage.Shadow_Generate:
-                //case ShaderStage.Shadow_Apply:
-                //case ShaderStage.Active_Camo:
+                case ShaderStage.Active_Camo:
                 //case ShaderStage.Lightmap_Debug_Mode:
                 //case ShaderStage.Static_Per_Vertex_Color:
-                //case ShaderStage.Water_Tesselation:
-                //case ShaderStage.Water_Shading:
                 //case ShaderStage.Dynamic_Light_Cinematic:
-                //case ShaderStage.Z_Only:
                 //case ShaderStage.Sfx_Distort:
+                    break;
                 default:
                     return null;
             }

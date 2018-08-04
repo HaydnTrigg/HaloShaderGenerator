@@ -51,6 +51,11 @@ PS_OUTPUT_ALBEDO entry_albedo(VS_OUTPUT input) : COLOR
 	return output;
 }
 
+float4 entry_active_camo(VS_OUTPUT input) : COLOR
+{
+	return float4(1.0, 0.0, 1.0, 0.15);
+}
+
 
 
 

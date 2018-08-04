@@ -62,6 +62,12 @@ namespace HaloShaderGenerator
             switch (type)
             {
                 case ShaderType.Shader:
+                    Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
+                    if (shadergeneratortype != null)
+                    {
+                        return (dynamic)shadergeneratortype.GetMethod("IsShaderStageSupported").Invoke(null, new object[] { stage });
+                    }
+                    return false;
                 case ShaderType.Beam:
                 case ShaderType.Contrail:
                 case ShaderType.Decal:
