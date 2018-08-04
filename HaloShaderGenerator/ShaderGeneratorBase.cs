@@ -28,7 +28,7 @@ namespace HaloShaderGenerator
                 string path = Path.Combine("HaloShaderGenerator\\shader_code", relative_path);
                 string directory = Path.GetDirectoryName(path);
 
-                var resourceName = path.Replace('\\', '.');
+                var resourceName = path.Replace('\\', '.').Replace('/', '.');
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {
@@ -59,7 +59,7 @@ namespace HaloShaderGenerator
             }
         }
 
-        public static byte[] GenerateSource(string template, IEnumerable<D3D.SHADER_MACRO> macros)
+        public static byte[] GenerateSource(string template, IEnumerable<D3D.SHADER_MACRO> macros, string entry, string version)
         {
             IncludeManager include = new IncludeManager();
 
@@ -67,8 +67,8 @@ namespace HaloShaderGenerator
 
             byte[] shader_code = D3DCompiler.Compile(
                 shader_source,
-                "main",
-                "ps_3_0",
+                entry,
+                version,
                 macros.ToArray(),
                 0,
                 0,
@@ -77,6 +77,50 @@ namespace HaloShaderGenerator
             );
 
             return shader_code;
+        }
+
+        public static string CreateMethodDefinition(object method, string prefix = "", string suffix = "")
+        {
+            var method_type_name = method.GetType().Name.ToLower();
+            var method_name = method.ToString().ToLower();
+
+            return $"{prefix.ToLower()}{method_type_name}_{method_name}{suffix.ToLower()}";
+        }
+
+        public static string CreateMethodDefinitionFromArgs<MethodType>(IEnumerable<object> args, string prefix = "", string suffix = "") where MethodType : struct, IConvertible
+        {
+            var method = args.Where(arg => arg.GetType() == typeof(MethodType)).Cast<MethodType>().FirstOrDefault();
+            var method_type_name = method.GetType().Name.ToLower();
+            var method_name = method.ToString().ToLower();
+
+            return $"{prefix.ToLower()}{method_type_name}_{method_name}{suffix.ToLower()}";
+        }
+
+        public static D3D.SHADER_MACRO CreateMacro(string name, object method, string prefix = "", string suffix = "")
+        {
+            return new D3D.SHADER_MACRO { Name = name, Definition = CreateMethodDefinition(method, prefix, suffix) };
+        }
+
+        public static D3D.SHADER_MACRO CreateMacroFromArgs<MethodType>(string name, IEnumerable<object> args, string prefix = "", string suffix = "") where MethodType : struct, IConvertible
+        {
+            return new D3D.SHADER_MACRO { Name = name, Definition = CreateMethodDefinitionFromArgs<MethodType>(args, prefix, suffix) };
+        }
+
+        public static IEnumerable<D3D.SHADER_MACRO> CreateMethodEnumDefinitions<MethodType>() where MethodType : struct, IConvertible
+        {
+            List<D3D.SHADER_MACRO> macros = new List<D3D.SHADER_MACRO>();
+
+            var method_type_name = typeof(MethodType).Name.ToLower();
+
+            var values = Enum.GetValues(typeof(MethodType));
+            foreach (var method in values)
+            {
+                var method_name = method.ToString().ToLower();
+
+                macros.Add(new D3D.SHADER_MACRO { Name = $"{method_type_name}_{method_name}", Definition = ((int)method).ToString() });
+            }
+
+            return macros;
         }
     }
 }

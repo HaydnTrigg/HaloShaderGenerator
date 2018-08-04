@@ -5,12 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{17BFEFFB-1619-4647-BA40-3CD1D87FD774}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>HaloShaderGenerator</RootNamespace>
     <AssemblyName>HaloShaderGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,6 +39,9 @@
   <PropertyGroup>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
@@ -47,25 +51,24 @@
     <Compile Include="DirectX\Include.cs" />
     <Compile Include="Enums\Albedo.cs" />
     <Compile Include="Enums\ShaderStage.cs" />
-    <Compile Include="main.cs" />
     <Compile Include="ShaderGenerator.cs" />
     <Compile Include="ShaderGeneratorBase.cs" />
     <Compile Include="ShaderGenerator_Enums.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="shader_code\methods\albedo.hlsli" />
-    <Content Include="shader_code\methods\alpha_test.hlsli" />
-    <Content Include="shader_code\methods\blend_mode.hlsli" />
-    <Content Include="shader_code\methods\bump_mapping.hlsli" />
-    <Content Include="shader_code\methods\distortion.hlsli" />
-    <Content Include="shader_code\methods\environment_mapping.hlsli" />
-    <Content Include="shader_code\methods\material_mode.hlsli" />
-    <Content Include="shader_code\methods\misc.hlsli" />
-    <Content Include="shader_code\methods\parallax.hlsli" />
-    <Content Include="shader_code\methods\parameters.hlsli" />
-    <Content Include="shader_code\methods\self_illumination.hlsli" />
-    <Content Include="shader_code\methods\soft_fade.hlsli" />
-    <Content Include="shader_code\methods\specular_mask.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\albedo.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\alpha_test.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\blend_mode.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\bump_mapping.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\distortion.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\environment_mapping.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\material_mode.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\misc.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\parallax.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\parameters.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\self_illumination.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\soft_fade.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\specular_mask.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="shader_code\beam.hlsl" />
@@ -79,6 +82,9 @@
     <EmbeddedResource Include="shader_code\terrain.hlsl" />
     <EmbeddedResource Include="shader_code\water.hlsl" />
     <EmbeddedResource Include="shader_code\zonly.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\helpers\math.hlsli" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
