@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using HaloShaderGenerator.DirectX;
@@ -10,6 +11,34 @@ namespace HaloShaderGenerator
 {
     public partial class ShaderGenerator
     {
+        public static bool IsShaderStageSupported(ShaderStage stage)
+        {
+            switch (stage)
+            {
+                //case ShaderStage.Default:
+                case ShaderStage.Albedo:
+                //case ShaderStage.Static_Default:
+                //case ShaderStage.Static_Per_Pixel:
+                //case ShaderStage.Static_Per_Vertex:
+                //case ShaderStage.Static_Sh:
+                //case ShaderStage.Static_Prt_Ambient:
+                //case ShaderStage.Static_Prt_Linear:
+                //case ShaderStage.Static_Prt_Quadratic:
+                //case ShaderStage.Dynamic_Light:
+                //case ShaderStage.Shadow_Generate:
+                //case ShaderStage.Shadow_Apply:
+                //case ShaderStage.Active_Camo:
+                //case ShaderStage.Lightmap_Debug_Mode:
+                //case ShaderStage.Static_Per_Vertex_Color:
+                //case ShaderStage.Water_Tesselation:
+                //case ShaderStage.Water_Shading:
+                //case ShaderStage.Dynamic_Light_Cinematic:
+                //case ShaderStage.Z_Only:
+                //case ShaderStage.Sfx_Distort:
+                    return true;
+            }
+            return false;
+        }
         public static Task<byte[]> GenerateAsync(
             ShaderStage stage,
             Albedo albedo,
@@ -91,11 +120,44 @@ namespace HaloShaderGenerator
             }
 
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Albedo>());
-            macros.Add(ShaderGeneratorBase.CreateMacro("calc_albedo_ps", albedo, "calc_", "_ps"));
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Bump_Mapping>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Alpha_Test>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Specular_Mask>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Material_Model>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Environment_Mapping>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Self_Illumination>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Blend_Mode>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Parallax>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Misc>());
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_albedo_ps", albedo, "calc_albedo_", "_ps"));
             if (albedo == Albedo.Constant_Color)
             {
-                macros.Add(ShaderGeneratorBase.CreateMacro("calc_albedo_vs", albedo, "calc_", "_vs"));
+                macros.Add(ShaderGeneratorBase.CreateMacro("calc_albedo_vs", albedo, "calc_albedo_", "_vs"));
             }
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_bumpmap_ps", bump_mapping, "calc_bumpmap_", "_ps"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_bumpmap_vs", bump_mapping, "calc_bumpmap_", "_vs"));
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_alpha_test_ps", alpha_test, "calc_alpha_test_", "_ps"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_specular_mask_ps", specular_mask, "calc_specular_mask_", "_ps"));
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_self_illumination_ps", self_illumination, "calc_self_illumination_", "_ps"));
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("calc_parallax_ps", parallax, "calc_parallax_", "_ps"));
+            switch (parallax)
+            {
+                case Parallax.Simple_Detail:
+                    macros.Add(ShaderGeneratorBase.CreateMacro("calc_parallax_vs", Parallax.Simple, "calc_parallax_", "_vs"));
+                    break;
+                default:
+                    macros.Add(ShaderGeneratorBase.CreateMacro("calc_parallax_vs", parallax, "calc_parallax_", "_vs"));
+                    break;
+            }
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("material_type", material_model));
+            macros.Add(ShaderGeneratorBase.CreateMacro("envmap_type", environment_mapping));
+            macros.Add(ShaderGeneratorBase.CreateMacro("blend_type", blend_mode));
 
             macros.Add(ShaderGeneratorBase.CreateMacro("shader_stage", stage));
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<ShaderStage>());

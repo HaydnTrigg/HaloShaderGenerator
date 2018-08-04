@@ -1,6 +1,14 @@
 ﻿#define shader_template
-#include "methods\bump_mapping.hlsli"
 #include "methods\albedo.hlsli"
+#include "methods\bump_mapping.hlsli"
+#include "methods\alpha_test.hlsli"
+#include "methods\specular_mask.hlsli"
+#include "methods\material_model.hlsli"
+#include "methods\environment_mapping.hlsli"
+#include "methods\self_illumination.hlsli"
+#include "methods\blend_mode.hlsli"
+#include "methods\parallax.hlsli"
+#include "methods\misc.hlsli"
 
 struct VS_OUTPUT
 {
@@ -37,8 +45,8 @@ PS_OUTPUT_ALBEDO entry_albedo(VS_OUTPUT input) : COLOR
 	float3 normal = calc_bumpmap_ps(tangentspace_x, tangentspace_y, tangentspace_z, texcoord);
 
 	PS_OUTPUT_ALBEDO output;
-	output.Diffuse = float4(diffuse, alpha);
-	output.Normal = float4(normal, alpha);
+	output.Diffuse = blend_type(float4(diffuse, alpha));
+	output.Normal = blend_type(float4(normal, alpha));
 	output.Unknown = unknown.xxxx;
 	return output;
 }
@@ -48,14 +56,3 @@ PS_OUTPUT_ALBEDO entry_albedo(VS_OUTPUT input) : COLOR
 
 
 
-
-
-
-
-
-
-
-float4 main(float texCoord : TEXCOORD) : COLOR
-{
-	return calc_albedo_ps(texCoord);
-}

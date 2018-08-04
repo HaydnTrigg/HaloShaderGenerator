@@ -61,6 +61,19 @@ namespace HaloShaderGenerator
 
         public static byte[] GenerateSource(string template, IEnumerable<D3D.SHADER_MACRO> macros, string entry, string version)
         {
+            // Macros should never be duplicated
+            for (var i = 0; i < macros.Count(); i++)
+            {
+                for (var j = 0; j < macros.Count(); j++)
+                {
+                    if (i == j) continue;
+                    if (macros.ElementAt(i).Name == macros.ElementAt(j).Name)
+                    {
+                        throw new Exception($"Macro {macros.ElementAt(i).Name} is defined multiple times");
+                    }
+                }
+            }    
+
             IncludeManager include = new IncludeManager();
 
             string shader_source = include.ReadResource(template);
@@ -84,7 +97,7 @@ namespace HaloShaderGenerator
             var method_type_name = method.GetType().Name.ToLower();
             var method_name = method.ToString().ToLower();
 
-            return $"{prefix.ToLower()}{method_type_name}_{method_name}{suffix.ToLower()}";
+            return $"{prefix.ToLower()}{method_name}{suffix.ToLower()}";
         }
 
         public static string CreateMethodDefinitionFromArgs<MethodType>(IEnumerable<object> args, string prefix = "", string suffix = "") where MethodType : struct, IConvertible
@@ -93,7 +106,7 @@ namespace HaloShaderGenerator
             var method_type_name = method.GetType().Name.ToLower();
             var method_name = method.ToString().ToLower();
 
-            return $"{prefix.ToLower()}{method_type_name}_{method_name}{suffix.ToLower()}";
+            return $"{prefix.ToLower()}{method_name}{suffix.ToLower()}";
         }
 
         public static D3D.SHADER_MACRO CreateMacro(string name, object method, string prefix = "", string suffix = "")

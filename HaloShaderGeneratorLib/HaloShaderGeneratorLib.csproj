@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC8C6886-E1C0-41D6-AD74-A194CA0D841A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{AC09CCE8-CA0B-403A-9D9D-6EB56FAB289C}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <RootNamespace>HaloShaderGenerator</RootNamespace>
-    <AssemblyName>HaloShaderGeneratorTest</AssemblyName>
+    <AssemblyName>HaloShaderGeneratorLib</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,21 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Enums\Albedo.cs" />
+    <Compile Include="Enums\ShaderStage.cs" />
+    <Compile Include="Enums\ShaderType.cs" />
+    <Compile Include="HaloShaderGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Enums\ShaderGenerator_Enums.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HaloShaderGeneratorLib\HaloShaderGeneratorLib.csproj">
-      <Project>{ac09cce8-ca0b-403a-9d9d-6eb56fab289c}</Project>
-      <Name>HaloShaderGeneratorLib</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>cd $(SolutionDir)
-xcopy HaloShaderGenerator\bin\$(ConfigurationName)\HaloShaderGenerator.dll HaloShaderGeneratorTest\bin\$(ConfigurationName)\ /Y</PostBuildEvent>
-  </PropertyGroup>
 </Project>

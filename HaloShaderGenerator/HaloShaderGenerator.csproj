@@ -49,11 +49,8 @@
     <Compile Include="DirectX\D3D.cs" />
     <Compile Include="DirectX\D3DCompiler.cs" />
     <Compile Include="DirectX\Include.cs" />
-    <Compile Include="Enums\Albedo.cs" />
-    <Compile Include="Enums\ShaderStage.cs" />
     <Compile Include="ShaderGenerator.cs" />
     <Compile Include="ShaderGeneratorBase.cs" />
-    <Compile Include="ShaderGenerator_Enums.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="shader_code\methods\albedo.hlsli" />
@@ -62,7 +59,7 @@
     <EmbeddedResource Include="shader_code\methods\bump_mapping.hlsli" />
     <EmbeddedResource Include="shader_code\methods\distortion.hlsli" />
     <EmbeddedResource Include="shader_code\methods\environment_mapping.hlsli" />
-    <EmbeddedResource Include="shader_code\methods\material_mode.hlsli" />
+    <EmbeddedResource Include="shader_code\methods\material_model.hlsli" />
     <EmbeddedResource Include="shader_code\methods\misc.hlsli" />
     <EmbeddedResource Include="shader_code\methods\parallax.hlsli" />
     <EmbeddedResource Include="shader_code\methods\parameters.hlsli" />
@@ -85,6 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="shader_code\helpers\math.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HaloShaderGeneratorLib\HaloShaderGeneratorLib.csproj">
+      <Project>{ac09cce8-ca0b-403a-9d9d-6eb56fab289c}</Project>
+      <Name>HaloShaderGeneratorLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
