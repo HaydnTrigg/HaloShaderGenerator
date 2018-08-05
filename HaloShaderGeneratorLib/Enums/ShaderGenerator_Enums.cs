@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HaloShaderGenerator
+namespace HaloShaderGenerator.Enums
 {
     public enum Bump_Mapping
     {

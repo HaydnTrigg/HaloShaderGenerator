@@ -1,6 +1,7 @@
 ﻿using HaloShaderGenerator.Enums;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,12 +31,37 @@ namespace HaloShaderGenerator
                 var haloshadergenerator = "HaloShaderGenerator.dll";
                 if (!IsDllLoaded(haloshadergenerator))
                 {
-                    var path = Path.GetFullPath(haloshadergenerator);
-                    if (File.Exists(path))
+                    var local_path = Path.GetFullPath(haloshadergenerator);
+#if DEBUG
+                    Console.WriteLine(local_path);
+#endif
+                    if (File.Exists(local_path))
                     {
-                        _HaloShaderGeneratorAssembly = Assembly.LoadFile(path);
+                        _HaloShaderGeneratorAssembly = Assembly.LoadFile(local_path);
+#if DEBUG
+                        Console.WriteLine("Library found!");
+#endif
                         return _HaloShaderGeneratorAssembly;
                     }
+
+                    var process = Process.GetCurrentProcess(); // Or whatever method you are using
+                    string fullPath = process.MainModule.FileName;
+
+                    var relative_to_process_path = Path.Combine(Path.GetDirectoryName(fullPath), haloshadergenerator);
+                    Console.WriteLine(relative_to_process_path);
+                    if (File.Exists(relative_to_process_path))
+                    {
+                        _HaloShaderGeneratorAssembly = Assembly.LoadFile(relative_to_process_path);
+#if DEBUG
+                        Console.WriteLine("Library found!");
+#endif
+                        return _HaloShaderGeneratorAssembly;
+                    }
+
+#if DEBUG
+                    Console.WriteLine("Library doesn't exist!");
+#endif
+
                     return null;
                 }
                 return null;
