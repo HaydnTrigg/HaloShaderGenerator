@@ -49,7 +49,7 @@ PS_OUTPUT_ALBEDO entry_albedo(VS_OUTPUT input) : COLOR
 	}
     diffuse = bungie_color_processing(diffuse);
     
-	float3 normal = calc_bumpmap_ps(tangentspace_x, tangentspace_y, tangentspace_z, texcoord);
+    float3 normal = calc_bumpmap_ps(tangentspace_x, tangentspace_y, tangentspace_z, texcoord);
 
 	PS_OUTPUT_ALBEDO output;
 	output.Diffuse = blend_type(float4(diffuse, alpha));

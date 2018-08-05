@@ -1,6 +1,8 @@
 ﻿#ifndef _SHADER_HLSLI
 #define _SHADER_HLSLI
 
+#include "../helpers/types.hlsli"
+
 uniform float4 g_exposure : register(c0);
 
 //TODO
@@ -29,5 +31,54 @@ uniform float4 simple_lights[40] : register(c18);
 This region here is where dynamically created uniforms are allowed
 Not entirely sure where this ends
 */
+
+/*
+-------------------------------------------------- ALBEDO
+*/
+
+uniform float4 albedo_color;
+uniform float4 albedo_color2;
+uniform float4 albedo_color3;
+
+uniform sampler base_map;
+uniform xform2d base_map_xform;
+// no idea why this is so, this seems to disappear when hightmaps are present :/
+// we need a better solution for this
+#ifdef shader_template 
+uniform xform2d unknown_map : register(s1);
+#endif
+uniform sampler detail_map;
+uniform xform2d detail_map_xform;
+
+uniform float4 debug_tint;
+
+uniform sampler detail_map2;
+uniform xform2d detail_map2_xform;
+
+uniform sampler change_color_map;
+uniform xform2d change_color_map_xform;
+uniform float3 primary_change_color;
+uniform float3 secondary_change_color;
+uniform float4 primary_change_color_old : register(c190); // TODO Figure this one out
+uniform float4 secondary_change_color_old : register(c191); // TODO Figure this one out
+uniform float3 tertiary_change_color;
+uniform float3 quaternary_change_color;
+
+uniform sampler detail_map3;
+uniform xform2d detail_map3_xform;
+
+uniform sampler detail_map_overlay;
+uniform xform2d detail_map_overlay_xform;
+
+uniform sampler color_mask_map;
+uniform xform2d color_mask_map_xform;
+uniform float4 neutral_gray;
+
+/*
+-------------------------------------------------- END ALBEDO
+*/
+
+
+
 
 #endif

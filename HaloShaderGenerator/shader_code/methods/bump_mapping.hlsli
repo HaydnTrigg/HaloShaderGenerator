@@ -10,6 +10,8 @@ uniform xform2d bump_map_xform;
 uniform sampler bump_detail_map;
 uniform xform2d bump_detail_map_xform;
 uniform xform2d bump_detail_coefficient;
+uniform sampler bump_detail_mask_map;
+uniform xform2d bump_detail_mask_map_xform;
 
 float3 calc_bumpmap_off_ps(
 	float3 tangentspace_x,
@@ -28,8 +30,7 @@ float3 calc_bumpmap_default_ps(
 ) {
     float2 bump_map_texcoord = apply_xform2d(texcoord, bump_map_xform);
     float3 normal = sample_normal_2d(bump_map, bump_map_texcoord);
-    float3 model_normal = normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, normal);
-    return model_normal;
+    return normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, normal);
 }
 
 float3 calc_bumpmap_detail_ps(
@@ -39,12 +40,9 @@ float3 calc_bumpmap_detail_ps(
 	float2 texcoord
 )
 {
-    return tangentspace_z; //TODO
     float3 bump_map_sample = sample_normal_2d(bump_map, apply_xform2d(texcoord, bump_map_xform));
     float3 bump_detail_map_sample = sample_normal_2d(bump_detail_map, apply_xform2d(texcoord, bump_detail_map_xform));
-
     float3 normal = bump_map_sample + bump_detail_map_sample * bump_detail_coefficient.x;
-
     return normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, normal);
 }
 
@@ -55,13 +53,13 @@ float3 calc_bumpmap_detail_masked_ps(
 	float2 texcoord
 )
 {
-    return tangentspace_z; //TODO
-    //float3 bump_map_sample = sample_normal_2d(bump_map, apply_xform2d(texcoord, bump_map_xform));
-    //float3 bump_detail_map_sample = sample_normal_2d(bump_detail_map, apply_xform2d(texcoord, bump_detail_map_xform));
+    float3 bump_map_sample = sample_normal_2d(bump_map, apply_xform2d(texcoord, bump_map_xform));
+    float3 bump_detail_map_sample = sample_normal_2d(bump_detail_map, apply_xform2d(texcoord, bump_detail_map_xform));
+    float3 normal = bump_map_sample + bump_detail_map_sample * bump_detail_coefficient.x;
+    return normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, normal);
 
-    //float3 normal = bump_map_sample + bump_detail_map_sample * bump_detail_coefficient.x;
-
-    //return normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, normal);
+    //NOTE: This is a new saber shader
+    //TODO: We need to implement the mask
 }
 
 float3 calc_bumpmap_detail_plus_detail_masked_ps(
@@ -70,7 +68,13 @@ float3 calc_bumpmap_detail_plus_detail_masked_ps(
 	float3 tangentspace_z,
 	float2 texcoord
 ) {
-	return tangentspace_z; //TODO
+    float3 bump_map_sample = sample_normal_2d(bump_map, apply_xform2d(texcoord, bump_map_xform));
+    float3 bump_detail_map_sample = sample_normal_2d(bump_detail_map, apply_xform2d(texcoord, bump_detail_map_xform));
+    float3 normal = bump_map_sample + bump_detail_map_sample * bump_detail_coefficient.x;
+    return normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, normal);
+
+    //NOTE: This is a new saber shader
+    //TODO: We need to implement the mask + second detail
 }
 
 void calc_bumpmap_off_vs()

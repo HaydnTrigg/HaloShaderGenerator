@@ -3,42 +3,7 @@
 
 #include "../helpers/types.hlsli"
 #include "../helpers/math.hlsli"
-
-uniform float4 albedo_color;
-uniform float4 albedo_color2;
-uniform float4 albedo_color3;
-
-uniform sampler base_map;
-uniform xform2d base_map_xform;
-#ifdef shader_template // no idea why this is so
-uniform xform2d unknown_map : register(s1);
-#endif
-uniform sampler detail_map;
-uniform xform2d detail_map_xform;
-
-uniform float4 debug_tint;
-
-uniform sampler detail_map2;
-uniform xform2d detail_map2_xform;
-
-uniform sampler change_color_map;
-uniform xform2d change_color_map_xform;
-uniform float3 primary_change_color;
-uniform float3 secondary_change_color;
-uniform float4 primary_change_color_old : register(c190); // TODO Figure this one out
-uniform float4 secondary_change_color_old : register(c191); // TODO Figure this one out
-uniform float3 tertiary_change_color;
-uniform float3 quaternary_change_color;
-
-uniform sampler detail_map3;
-uniform xform2d detail_map3_xform;
-
-uniform sampler detail_map_overlay;
-uniform xform2d detail_map_overlay_xform;
-
-uniform sampler color_mask_map;
-uniform xform2d color_mask_map_xform;
-uniform float4 neutral_gray;
+#include "../registers/shader.hlsli"
 
 float4 calc_albedo_default_ps(float2 texcoord)
 {
