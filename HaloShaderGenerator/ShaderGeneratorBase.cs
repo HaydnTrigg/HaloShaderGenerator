@@ -25,6 +25,14 @@ namespace HaloShaderGenerator
                 var assembly = Assembly.GetExecutingAssembly();
 
                 string relative_path = Path.Combine(parent_directory, filepath);
+
+                // HACK: This should be improved!!!
+                Uri uri1 = new Uri(Directory.GetCurrentDirectory() + "/");
+                Uri uri2 = new Uri(Path.GetFullPath(relative_path));
+                Uri relativeUri = uri1.MakeRelativeUri(uri2);
+                relative_path = relativeUri.ToString();
+                if (relative_path.StartsWith("./")) relative_path = relative_path.Substring(2);
+
                 string path = Path.Combine("HaloShaderGenerator\\shader_code", relative_path);
                 string directory = Path.GetDirectoryName(path);
 

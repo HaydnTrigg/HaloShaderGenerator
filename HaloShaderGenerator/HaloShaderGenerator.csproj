@@ -89,5 +89,20 @@
       <Name>HaloShaderGeneratorLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\registers\shader.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\helpers\types.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\helpers\bumpmap_math.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\helpers\color_processing.hlsli" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

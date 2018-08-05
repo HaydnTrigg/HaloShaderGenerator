@@ -4,7 +4,7 @@ float fade = 1.0;
 
 float4 opaque(float4 input)
 {
-	return float4(input.xyz, 1.0);
+    return input;
 }
 
 float4 additive(float4 input)

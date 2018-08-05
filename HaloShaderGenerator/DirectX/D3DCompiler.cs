@@ -12,6 +12,19 @@ namespace HaloShaderGenerator.DirectX
     {
         public static byte[] Compile(string Source, string Entrypoint, string Target, D3D.SHADER_MACRO[] Defines = null, int Flags1 = 0, int Flags2 = 0, string SourceName = null, Include include = null)
         {
+            // Macros should never be duplicated
+            for (var i = 0; i < Defines.Count(); i++)
+            {
+                for (var j = 0; j < Defines.Count(); j++)
+                {
+                    if (i == j) continue;
+                    if (Defines.ElementAt(i).Name == Defines.ElementAt(j).Name)
+                    {
+                        throw new Exception($"Macro {Defines.ElementAt(i).Name} is defined multiple times");
+                    }
+                }
+            }
+
             byte[] data = null;
             D3D.ID3DBlob ppCode = null;
             D3D.ID3DBlob ppErrorMsgs = null;

@@ -1,5 +1,11 @@
 ﻿#define shader_template
-#include "methods\albedo.hlsli"
+
+#include "registers/shader.hlsli"
+
+#include "methods/albedo.hlsli"
+#include "helpers/color_processing.hlsli"
+
+//TODO: These must be in the correct order for the registers to align, double check this
 #include "methods\bump_mapping.hlsli"
 #include "methods\alpha_test.hlsli"
 #include "methods\specular_mask.hlsli"
@@ -41,12 +47,13 @@ PS_OUTPUT_ALBEDO entry_albedo(VS_OUTPUT input) : COLOR
 		diffuse = diffuse_alpha.xyz;
 		alpha = diffuse_alpha.w;
 	}
-	
+    diffuse = bungie_color_processing(diffuse);
+    
 	float3 normal = calc_bumpmap_ps(tangentspace_x, tangentspace_y, tangentspace_z, texcoord);
 
 	PS_OUTPUT_ALBEDO output;
 	output.Diffuse = blend_type(float4(diffuse, alpha));
-	output.Normal = blend_type(float4(normal, alpha));
+    output.Normal = blend_type(float4(normal_export(normal), alpha));
 	output.Unknown = unknown.xxxx;
 	return output;
 }
@@ -55,9 +62,3 @@ float4 entry_active_camo(VS_OUTPUT input) : COLOR
 {
 	return float4(1.0, 0.0, 1.0, 0.15);
 }
-
-
-
-
-
-
