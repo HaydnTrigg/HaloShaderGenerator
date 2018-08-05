@@ -5,14 +5,6 @@
 #include "../helpers/math.hlsli"
 #include "../helpers/bumpmap_math.hlsli"
 
-uniform sampler bump_map;
-uniform xform2d bump_map_xform;
-uniform sampler bump_detail_map;
-uniform xform2d bump_detail_map_xform;
-uniform xform2d bump_detail_coefficient;
-uniform sampler bump_detail_mask_map;
-uniform xform2d bump_detail_mask_map_xform;
-
 float3 calc_bumpmap_off_ps(
 	float3 tangentspace_x,
 	float3 tangentspace_y,

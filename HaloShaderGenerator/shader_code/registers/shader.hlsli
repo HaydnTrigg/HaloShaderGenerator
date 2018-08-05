@@ -44,8 +44,9 @@ uniform sampler base_map;
 uniform xform2d base_map_xform;
 // no idea why this is so, this seems to disappear when hightmaps are present :/
 // we need a better solution for this
+//NOTE: We should be able to macro this out
 #ifdef shader_template 
-uniform xform2d unknown_map : register(s1);
+uniform xform2d __unknown_s1 : register(s1);
 #endif
 uniform sampler detail_map;
 uniform xform2d detail_map_xform;
@@ -76,6 +77,22 @@ uniform float4 neutral_gray;
 
 /*
 -------------------------------------------------- END ALBEDO
+*/
+
+/*
+-------------------------------------------------- BUMP MAPPING
+*/
+
+uniform sampler bump_map;
+uniform xform2d bump_map_xform;
+uniform sampler bump_detail_map;
+uniform xform2d bump_detail_map_xform;
+uniform xform2d bump_detail_coefficient;
+uniform sampler bump_detail_mask_map;
+uniform xform2d bump_detail_mask_map_xform;
+
+/*
+-------------------------------------------------- END BUMP MAPPING
 */
 
 
