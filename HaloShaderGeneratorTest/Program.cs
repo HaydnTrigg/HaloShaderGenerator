@@ -19,8 +19,8 @@ namespace HaloShaderGenerator
             for (int i = 0; i < 1000; i++)
             {
                 var task = ShaderGenerator.GenerateAsync(
-                ShaderStage.Albedo,
-                Albedo.Two_Change_Color,
+                ShaderStage.Static_Prt_Ambient,
+                Albedo.Default,
                 Bump_Mapping.Off,
                 Alpha_Test.None,
                 Specular_Mask.No_Specular_Mask,
@@ -49,19 +49,19 @@ namespace HaloShaderGenerator
         static int Main()
         {
             var bytecode = ShaderGenerator.Generate(
-                    ShaderStage.Active_Camo,
-                    Albedo.Two_Change_Color,
-                    Bump_Mapping.Off,
-                    Alpha_Test.None,
-                    Specular_Mask.No_Specular_Mask,
-                    Material_Model.None,
-                    Environment_Mapping.None,
-                    Self_Illumination.Off,
-                    Blend_Mode.Opaque,
-                    Parallax.Off,
-                    Misc.First_Person_Always,
-                    Distortion.Off,
-                    Soft_fade.Off
+                ShaderStage.Albedo,
+                Albedo.Default,
+                Bump_Mapping.Off,
+                Alpha_Test.None,
+                Specular_Mask.No_Specular_Mask,
+                Material_Model.None,
+                Environment_Mapping.None,
+                Self_Illumination.Off,
+                Blend_Mode.Opaque,
+                Parallax.Off,
+                Misc.First_Person_Always,
+                Distortion.Off,
+                Soft_fade.Off
                 );
 
             var str = D3DCompiler.Disassemble(bytecode);

@@ -20,9 +20,9 @@ namespace HaloShaderGenerator
                 //case ShaderStage.Static_Per_Pixel:
                 //case ShaderStage.Static_Per_Vertex:
                 //case ShaderStage.Static_Sh:
-                //case ShaderStage.Static_Prt_Ambient:
-                //case ShaderStage.Static_Prt_Linear:
-                //case ShaderStage.Static_Prt_Quadratic:
+                case ShaderStage.Static_Prt_Ambient:
+                case ShaderStage.Static_Prt_Linear:
+                case ShaderStage.Static_Prt_Quadratic:
                 //case ShaderStage.Dynamic_Light:
                 //case ShaderStage.Shadow_Generate:
                 case ShaderStage.Active_Camo:
@@ -95,9 +95,9 @@ namespace HaloShaderGenerator
                 //case ShaderStage.Static_Per_Pixel:
                 //case ShaderStage.Static_Per_Vertex:
                 //case ShaderStage.Static_Sh:
-                //case ShaderStage.Static_Prt_Ambient:
-                //case ShaderStage.Static_Prt_Linear:
-                //case ShaderStage.Static_Prt_Quadratic:
+                case ShaderStage.Static_Prt_Ambient:
+                case ShaderStage.Static_Prt_Linear:
+                case ShaderStage.Static_Prt_Quadratic:
                 //case ShaderStage.Dynamic_Light:
                 //case ShaderStage.Shadow_Generate:
                 case ShaderStage.Active_Camo:
@@ -110,6 +110,8 @@ namespace HaloShaderGenerator
                     return null;
             }
 
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<ShaderStage>());
+            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<ShaderType>());
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Albedo>());
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Bump_Mapping>());
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Alpha_Test>());
@@ -150,8 +152,13 @@ namespace HaloShaderGenerator
             macros.Add(ShaderGeneratorBase.CreateMacro("envmap_type", environment_mapping));
             macros.Add(ShaderGeneratorBase.CreateMacro("blend_type", blend_mode));
 
-            macros.Add(ShaderGeneratorBase.CreateMacro("shader_stage", stage));
-            macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<ShaderStage>());
+            macros.Add(ShaderGeneratorBase.CreateMacro("shaderstage", stage, "shaderstage_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("shadertype", stage, "shadertype_"));
+
+            macros.Add(ShaderGeneratorBase.CreateMacro("albedo_template_id", albedo, "albedo_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("environment_mapping_template_id", environment_mapping, "environment_mapping_"));
+
+            
 
             var shader_bytecode = ShaderGeneratorBase.GenerateSource(template, macros, "entry_" + stage.ToString().ToLower(), "ps_3_0");
             return shader_bytecode;
