@@ -49,7 +49,7 @@ namespace HaloShaderGenerator
         static int Main()
         {
             var bytecode = ShaderGenerator.Generate(
-                ShaderStage.Albedo,
+                ShaderStage.Static_Prt_Ambient,
                 Albedo.Default,
                 Bump_Mapping.Off,
                 Alpha_Test.None,

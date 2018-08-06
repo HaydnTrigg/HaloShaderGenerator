@@ -117,6 +117,8 @@ struct VS_OUTPUT_STATIC_PTR_AMBIENT
 
 PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) : COLOR
 {
+    PS_OUTPUT_DEFAULT output;
+
     //   no_dynamic_lights     b0       1
     //   g_exposure            c0       1
     //   p_lighting_constant_0 c1       1
@@ -152,6 +154,7 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     float4 c10 = p_lighting_constant_9;
     float2 c14 = texture_size;
     float3 c16 = Camera_Position_PS;
+    float c17 = simple_light_count;
     float4 c18 = simple_lights[0];
     float4 c19 = simple_lights[1];
     float4 c20 = simple_lights[2];
@@ -237,7 +240,6 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     //rcp r0.y, c14.y
     float2 texel_size = 1.0 / texture_size;
     r0.xy = texel_size;
-    
     //add r0.zw, c11.x, vPos.xyxy
     r0.zw = (c11.xxxx + vPos.xyxy).zw;
     //mul r0.xy, r0, r0.zwzw
@@ -290,8 +292,7 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     r1.xyz = (r1 * c12.xxxx).xyz;
     
     
-    //if b0
-    if (b0 || true)
+    if (b0) //if b0
     {
         //  mul r3.xyz, r1, v1.x
         r3.xyz = (r1 * v1.xxxx).xyz;
@@ -299,182 +300,203 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     else //else
     {
         //  mov r4.y, c12.y
+        r4.y = c12.y;
         //  if_lt -c17.x, r4.y
-        //    add r4.xyz, c16, -v0
-        //    add r5.xyz, -r4, c18
-        //    dp3 r0.w, r5, r5
-        //    rsq r1.w, r0.w
-        //    mul r5.xyz, r1.w, r5
-        //    dp3 r1.w, r2, r5
-        //    add r2.w, r0.w, c18.w
-        //    rcp r6.x, r2.w
-        //    dp3 r6.y, r5, c19
-        //    mad r5.xy, r6, c21, c21.zwzw
-        //    max r6.xy, c12.z, r5
-        //    pow r2.w, r6.y, c20.w
-        //    add_sat r2.w, r2.w, c19.w
-        //    mov_sat r6.x, r6.x
-        //    mul r2.w, r2.w, r6.x
-        //    max r3.w, c12.w, r1.w
-        //    add r0.w, r0.w, -c22.x
-        //    mul r5.xyz, r2.w, c20
-        //    mul r5.xyz, r3.w, r5
-        //    cmp r5.xyz, r0.w, c12.y, r5
-        //    mov r6.yz, c11
-        //    if_lt -r6.z, c17.x
-        //      add r6.xzw, -r4.xyyz, c23.xyyz
-        //      dp3 r0.w, r6.xzww, r6.xzww
-        //      rsq r1.w, r0.w
-        //      mul r6.xzw, r1.w, r6
-        //      dp3 r1.w, r2, r6.xzww
-        //      add r2.w, r0.w, c23.w
-        //      rcp r7.x, r2.w
-        //      dp3 r7.y, r6.xzww, c24
-        //      mad r6.xz, r7.xyyw, c26.xyyw, c26.zyww
-        //      max r7.xy, c12.z, r6.xzzw
-        //      pow r2.w, r7.y, c25.w
-        //      add_sat r2.w, r2.w, c24.w
-        //      mov_sat r7.x, r7.x
-        //      mul r2.w, r2.w, r7.x
-        //      max r3.w, c12.w, r1.w
-        //      add r0.w, r0.w, -c27.x
-        //      mul r6.xzw, r2.w, c25.xyyz
-        //      mad r6.xzw, r6, r3.w, r5.xyyz
-        //      cmp r5.xyz, r0.w, r5, r6.xzww
-        //      if_lt r6.y, c17.x
-        //        add r6.xyz, -r4, c28
-        //        dp3 r0.w, r6, r6
-        //        rsq r1.w, r0.w
-        //        mul r6.xyz, r1.w, r6
-        //        dp3 r1.w, r2, r6
-        //        add r2.w, r0.w, c28.w
-        //        rcp r7.x, r2.w
-        //        dp3 r7.y, r6, c29
-        //        mad r6.xy, r7, c31, c31.zwzw
-        //        max r7.xy, c12.z, r6
-        //        pow r2.w, r7.y, c30.w
-        //        add_sat r2.w, r2.w, c29.w
-        //        mov_sat r7.x, r7.x
-        //        mul r2.w, r2.w, r7.x
-        //        max r3.w, c12.w, r1.w
-        //        add r0.w, r0.w, -c32.x
-        //        mul r6.xyz, r2.w, c30
-        //        mad r6.xyz, r6, r3.w, r5
-        //        cmp r5.xyz, r0.w, r5, r6
-        //        mov r6.x, c17.x
-        //        if_lt c13.x, r6.x
-        //          add r6.yzw, -r4.xxyz, c33.xxyz
-        //          dp3 r0.w, r6.yzww, r6.yzww
-        //          rsq r1.w, r0.w
-        //          mul r6.yzw, r1.w, r6
-        //          dp3 r1.w, r2, r6.yzww
-        //          add r2.w, r0.w, c33.w
-        //          rcp r7.x, r2.w
-        //          dp3 r7.y, r6.yzww, c34
-        //          mad r6.yz, r7.xxyw, c36.xxyw, c36.xzww
-        //          max r7.xy, c12.z, r6.yzzw
-        //          pow r2.w, r7.y, c35.w
-        //          add_sat r2.w, r2.w, c34.w
-        //          mov_sat r7.x, r7.x
-        //          mul r2.w, r2.w, r7.x
-        //          max r3.w, c12.w, r1.w
-        //          add r0.w, r0.w, -c37.x
-        //          mul r6.yzw, r2.w, c35.xxyz
-        //          mad r6.yzw, r6, r3.w, r5.xxyz
-        //          cmp r5.xyz, r0.w, r5, r6.yzww
-        //          if_lt c13.y, r6.x
-        //            add r6.yzw, -r4.xxyz, c38.xxyz
-        //            dp3 r0.w, r6.yzww, r6.yzww
-        //            rsq r1.w, r0.w
-        //            mul r6.yzw, r1.w, r6
-        //            dp3 r1.w, r2, r6.yzww
-        //            add r2.w, r0.w, c38.w
-        //            rcp r7.x, r2.w
-        //            dp3 r7.y, r6.yzww, c39
-        //            mad r6.yz, r7.xxyw, c41.xxyw, c41.xzww
-        //            max r7.xy, c12.z, r6.yzzw
-        //            pow r2.w, r7.y, c40.w
-        //            add_sat r2.w, r2.w, c39.w
-        //            mov_sat r7.x, r7.x
-        //            mul r2.w, r2.w, r7.x
-        //            max r3.w, c12.w, r1.w
-        //            add r0.w, r0.w, -c42.x
-        //            mul r6.yzw, r2.w, c40.xxyz
-        //            mad r6.yzw, r6, r3.w, r5.xxyz
-        //            cmp r5.xyz, r0.w, r5, r6.yzww
-        //            if_lt c13.z, r6.x
-        //              add r6.yzw, -r4.xxyz, c43.xxyz
-        //              dp3 r0.w, r6.yzww, r6.yzww
-        //              rsq r1.w, r0.w
-        //              mul r6.yzw, r1.w, r6
-        //              dp3 r1.w, r2, r6.yzww
-        //              add r2.w, r0.w, c43.w
-        //              rcp r7.x, r2.w
-        //              dp3 r7.y, r6.yzww, c44
-        //              mad r6.yz, r7.xxyw, c46.xxyw, c46.xzww
-        //              max r7.xy, c12.z, r6.yzzw
-        //              pow r2.w, r7.y, c45.w
-        //              add_sat r2.w, r2.w, c44.w
-        //              mov_sat r7.x, r7.x
-        //              mul r2.w, r2.w, r7.x
-        //              max r3.w, c12.w, r1.w
-        //              add r0.w, r0.w, -c47.x
-        //              mul r6.yzw, r2.w, c45.xxyz
-        //              mad r6.yzw, r6, r3.w, r5.xxyz
-        //              cmp r5.xyz, r0.w, r5, r6.yzww
-        //              if_lt c13.w, r6.x
-        //                add r6.yzw, -r4.xxyz, c53.xxyz
-        //                dp3 r0.w, r6.yzww, r6.yzww
-        //                rsq r1.w, r0.w
-        //                mul r6.yzw, r1.w, r6
-        //                dp3 r1.w, r2, r6.yzww
-        //                add r2.w, r0.w, c53.w
-        //                rcp r7.x, r2.w
-        //                dp3 r7.y, r6.yzww, c54
-        //                mad r6.yz, r7.xxyw, c56.xxyw, c56.xzww
-        //                max r7.xy, c12.z, r6.yzzw
-        //                pow r2.w, r7.y, c55.w
-        //                add_sat r2.w, r2.w, c54.w
-        //                mov_sat r7.x, r7.x
-        //                mul r2.w, r2.w, r7.x
-        //                max r3.w, c12.w, r1.w
-        //                add r1.w, -r6.x, c15.x
-        //                add r4.xyz, -r4, c48
-        //                dp3 r4.w, r4, r4
-        //                rsq r5.w, r4.w
-        //                mul r4.xyz, r4, r5.w
-        //                dp3 r2.x, r2, r4
-        //                add r2.y, r4.w, c48.w
-        //                rcp r6.x, r2.y
-        //                dp3 r6.y, r4, c49
-        //                mad r2.yz, r6.xxyw, c51.xxyw, c51.xzww
-        //                max r4.xy, c12.z, r2.yzzw
-        //                pow r2.y, r4.y, c50.w
-        //                add_sat r2.y, r2.y, c49.w
-        //                mov_sat r4.x, r4.x
-        //                mul r2.y, r2.y, r4.x
-        //                max r4.x, c12.w, r2.x
-        //                add r2.x, r4.w, -c52.x
-        //                mul r4.yzw, r2.y, c50.xxyz
-        //                mad r4.xyz, r4.yzww, r4.x, r5
-        //                cmp r2.xyz, r2.x, r5, r4
-        //                add r0.w, r0.w, -c57.x
-        //                mul r4.xyz, r2.w, c55
-        //                mad r4.xyz, r4, r3.w, r2
-        //                cmp r4.xyz, r0.w, r2, r4
-        //                cmp r5.xyz, r1.w, r2, r4
-        //              endif
-        //            endif
-        //          endif
-        //        endif
-        //      endif
-        //    endif
-        //  else
-        //    mov r5.xyz, c12.y
-        //  endif
+        if (c17.x > r4.y)
+        {
+            //add r4.xyz, c16, -v0
+            //add r5.xyz, -r4, c18
+            //dp3 r0.w, r5, r5
+            //rsq r1.w, r0.w
+            //mul r5.xyz, r1.w, r5
+            //dp3 r1.w, r2, r5
+            //add r2.w, r0.w, c18.w
+            //rcp r6.x, r2.w
+            //dp3 r6.y, r5, c19
+            //mad r5.xy, r6, c21, c21.zwzw
+            //max r6.xy, c12.z, r5
+            //pow r2.w, r6.y, c20.w
+            //add_sat r2.w, r2.w, c19.w
+            //mov_sat r6.x, r6.x
+            //mul r2.w, r2.w, r6.x
+            //max r3.w, c12.w, r1.w
+            //add r0.w, r0.w, -c22.x
+            //mul r5.xyz, r2.w, c20
+            //mul r5.xyz, r3.w, r5
+            //cmp r5.xyz, r0.w, c12.y, r5
+            //mov r6.yz, c11
+
+            if (c17.x > r6.z) //if_lt -r6.z, c17.x
+            {
+                //add r6.xzw, -r4.xyyz, c23.xyyz
+                //dp3 r0.w, r6.xzww, r6.xzww
+                //rsq r1.w, r0.w
+                //mul r6.xzw, r1.w, r6
+                //dp3 r1.w, r2, r6.xzww
+                //add r2.w, r0.w, c23.w
+                //rcp r7.x, r2.w
+                //dp3 r7.y, r6.xzww, c24
+                //mad r6.xz, r7.xyyw, c26.xyyw, c26.zyww
+                //max r7.xy, c12.z, r6.xzzw
+                //pow r2.w, r7.y, c25.w
+                //add_sat r2.w, r2.w, c24.w
+                //mov_sat r7.x, r7.x
+                //mul r2.w, r2.w, r7.x
+                //max r3.w, c12.w, r1.w
+                //add r0.w, r0.w, -c27.x
+                //mul r6.xzw, r2.w, c25.xyyz
+                //mad r6.xzw, r6, r3.w, r5.xyyz
+                //cmp r5.xyz, r0.w, r5, r6.xzww
+
+                if (c17.x > r6.y) //if_lt r6.y, c17.x
+                {
+                    //add r6.xyz, -r4, c28
+                    //dp3 r0.w, r6, r6
+                    //rsq r1.w, r0.w
+                    //mul r6.xyz, r1.w, r6
+                    //dp3 r1.w, r2, r6
+                    //add r2.w, r0.w, c28.w
+                    //rcp r7.x, r2.w
+                    //dp3 r7.y, r6, c29
+                    //mad r6.xy, r7, c31, c31.zwzw
+                    //max r7.xy, c12.z, r6
+                    //pow r2.w, r7.y, c30.w
+                    //add_sat r2.w, r2.w, c29.w
+                    //mov_sat r7.x, r7.x
+                    //mul r2.w, r2.w, r7.x
+                    //max r3.w, c12.w, r1.w
+                    //add r0.w, r0.w, -c32.x
+                    //mul r6.xyz, r2.w, c30
+                    //mad r6.xyz, r6, r3.w, r5
+                    //cmp r5.xyz, r0.w, r5, r6
+                    //mov r6.x, c17.x
+
+                    if (c17.x > c13.x) //if_lt c13.x, r6.x
+                    {
+                        //add r6.yzw, -r4.xxyz, c33.xxyz
+                        //dp3 r0.w, r6.yzww, r6.yzww
+                        //rsq r1.w, r0.w
+                        //mul r6.yzw, r1.w, r6
+                        //dp3 r1.w, r2, r6.yzww
+                        //add r2.w, r0.w, c33.w
+                        //rcp r7.x, r2.w
+                        //dp3 r7.y, r6.yzww, c34
+                        //mad r6.yz, r7.xxyw, c36.xxyw, c36.xzww
+                        //max r7.xy, c12.z, r6.yzzw
+                        //pow r2.w, r7.y, c35.w
+                        //add_sat r2.w, r2.w, c34.w
+                        //mov_sat r7.x, r7.x
+                        //mul r2.w, r2.w, r7.x
+                        //max r3.w, c12.w, r1.w
+                        //add r0.w, r0.w, -c37.x
+                        //mul r6.yzw, r2.w, c35.xxyz
+                        //mad r6.yzw, r6, r3.w, r5.xxyz
+                        //cmp r5.xyz, r0.w, r5, r6.yzww
+
+                        if (c13.y < r6.x) //if_lt c13.y, r6.x
+                        {
+                            //add r6.yzw, -r4.xxyz, c38.xxyz
+                            //dp3 r0.w, r6.yzww, r6.yzww
+                            //rsq r1.w, r0.w
+                            //mul r6.yzw, r1.w, r6
+                            //dp3 r1.w, r2, r6.yzww
+                            //add r2.w, r0.w, c38.w
+                            //rcp r7.x, r2.w
+                            //dp3 r7.y, r6.yzww, c39
+                            //mad r6.yz, r7.xxyw, c41.xxyw, c41.xzww
+                            //max r7.xy, c12.z, r6.yzzw
+                            //pow r2.w, r7.y, c40.w
+                            //add_sat r2.w, r2.w, c39.w
+                            //mov_sat r7.x, r7.x
+                            //mul r2.w, r2.w, r7.x
+                            //max r3.w, c12.w, r1.w
+                            //add r0.w, r0.w, -c42.x
+                            //mul r6.yzw, r2.w, c40.xxyz
+                            //mad r6.yzw, r6, r3.w, r5.xxyz
+                            //cmp r5.xyz, r0.w, r5, r6.yzww
+                        
+                            if (c13.z < r6.x) //if_lt c13.z, r6.x
+                            {
+                                //add r6.yzw, -r4.xxyz, c43.xxyz
+                                //dp3 r0.w, r6.yzww, r6.yzww
+                                //rsq r1.w, r0.w
+                                //mul r6.yzw, r1.w, r6
+                                //dp3 r1.w, r2, r6.yzww
+                                //add r2.w, r0.w, c43.w
+                                //rcp r7.x, r2.w
+                                //dp3 r7.y, r6.yzww, c44
+                                //mad r6.yz, r7.xxyw, c46.xxyw, c46.xzww
+                                //max r7.xy, c12.z, r6.yzzw
+                                //pow r2.w, r7.y, c45.w
+                                //add_sat r2.w, r2.w, c44.w
+                                //mov_sat r7.x, r7.x
+                                //mul r2.w, r2.w, r7.x
+                                //max r3.w, c12.w, r1.w
+                                //add r0.w, r0.w, -c47.x
+                                //mul r6.yzw, r2.w, c45.xxyz
+                                //mad r6.yzw, r6, r3.w, r5.xxyz
+                                //cmp r5.xyz, r0.w, r5, r6.yzww
+                            
+                                if (c13.w < r6.x) //if_lt c13.w, r6.x
+                                {
+                                    //add r6.yzw, -r4.xxyz, c53.xxyz
+                                    //dp3 r0.w, r6.yzww, r6.yzww
+                                    //rsq r1.w, r0.w
+                                    //mul r6.yzw, r1.w, r6
+                                    //dp3 r1.w, r2, r6.yzww
+                                    //add r2.w, r0.w, c53.w
+                                    //rcp r7.x, r2.w
+                                    //dp3 r7.y, r6.yzww, c54
+                                    //mad r6.yz, r7.xxyw, c56.xxyw, c56.xzww
+                                    //max r7.xy, c12.z, r6.yzzw
+                                    //pow r2.w, r7.y, c55.w
+                                    //add_sat r2.w, r2.w, c54.w
+                                    //mov_sat r7.x, r7.x
+                                    //mul r2.w, r2.w, r7.x
+                                    //max r3.w, c12.w, r1.w
+                                    //add r1.w, -r6.x, c15.x
+                                    //add r4.xyz, -r4, c48
+                                    //dp3 r4.w, r4, r4
+                                    //rsq r5.w, r4.w
+                                    //mul r4.xyz, r4, r5.w
+                                    //dp3 r2.x, r2, r4
+                                    //add r2.y, r4.w, c48.w
+                                    //rcp r6.x, r2.y
+                                    //dp3 r6.y, r4, c49
+                                    //mad r2.yz, r6.xxyw, c51.xxyw, c51.xzww
+                                    //max r4.xy, c12.z, r2.yzzw
+                                    //pow r2.y, r4.y, c50.w
+                                    //add_sat r2.y, r2.y, c49.w
+                                    //mov_sat r4.x, r4.x
+                                    //mul r2.y, r2.y, r4.x
+                                    //max r4.x, c12.w, r2.x
+                                    //add r2.x, r4.w, -c52.x
+                                    //mul r4.yzw, r2.y, c50.xxyz
+                                    //mad r4.xyz, r4.yzww, r4.x, r5
+                                    //cmp r2.xyz, r2.x, r5, r4
+                                    //add r0.w, r0.w, -c57.x
+                                    //mul r4.xyz, r2.w, c55
+                                    //mad r4.xyz, r4, r3.w, r2
+                                    //cmp r4.xyz, r0.w, r2, r4
+                                    //cmp r5.xyz, r1.w, r2, r4
+                                } //endif
+                            } //endif
+                        } //endif
+                    } //endif
+                } //endif
+            } //endif
+        }
+        else //  else
+        {
+            //    mov r5.xyz, c12.y
+            r5.xyz = c12.yyy;
+        } //  endif
+        
         //  mad r3.xyz, r1, v1.x, r5
-    }
-    //endif
+        r3.xyz = (r1 * v1.xxxx + r5).xyz;
+    } //endif
+
+    
     //mul r0.xyz, r0, r3
     r0.xyz = (r0 * r3).xyz;
     //mov r1.xyz, v2
@@ -482,28 +504,29 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     //mad r0.xyz, r0, r1, v3
     r0.xyz = (r0 * r1).xyz + v3;
     //mul r0.xyz, r0, c0.x
-    r0.xyz = (r0 * c0.x).xyz;
+    r0.xyz = (r0 * g_exposure.x).xyz;
     //max r1.xyz, r0, c12.y
-    r0.xyz = max(r0.xyz, c12.yyy);
+    r1.xyz = max(r0.xyz, c12.yyy);
     //rcp r0.x, c0.y
-    r0.x = 1.0 / c0.y;
+    r0.x = 1.0 / g_exposure.y;
     //mul oC1.xyz, r0.x, r1
     oC1.xyz = (r1 * r0.xxxx).xyz;
     //mov oC0.xyz, r1
     oC0.xyz = (r1).xyz;
     //mov oC0.w, c0.w
-    oC0.w = c0.w;
+    oC0.w = g_exposure.w;
     //mov oC1.w, c0.z
-    oC1.w = c0.z;
+    oC1.w = g_exposure.z;
     //mov oC2, c12.y
 
-    PS_OUTPUT_DEFAULT output;
+    
     //output.LowFrequency = export_low_frequency(float4(frag_coord, 0.0, 0.15));
     //output.HighFrequency = export_high_frequency(float4(0.0, 0.0, 0.0, 0));
     output.LowFrequency = oC0;
     output.HighFrequency = oC1;
     //output.LowFrequency = outputB;
     //output.HighFrequency = outputA * 0.00001;
+    
 
     output.Unknown = float4(0, 0, 0, 0);
     return output;
