@@ -3,6 +3,8 @@
 
 #include "../helpers/types.hlsli"
 
+uniform sampler scene_ldr_texture;
+
 uniform float4 g_exposure : register(c0);
 
 //TODO
@@ -19,10 +21,12 @@ uniform float4 __unknown_c10 : register(c10);
 uniform float4 __unknown_c11 : register(c11);
 uniform float4 __unknown_c12 : register(c12);
 uniform float4 __unknown_c13 : register(c13);
-uniform float4 __unknown_c14 : register(c14);
 uniform float4 __unknown_c15 : register(c15);
 uniform float4 __unknown_c16 : register(c16);
 uniform float4 __unknown_c17 : register(c17);
+
+
+uniform float4 texture_size : register(c14);
 
 // Not 100% sure if this is in here all the time
 uniform float4 simple_lights[40] : register(c18);
@@ -60,8 +64,7 @@ uniform sampler change_color_map;
 uniform xform2d change_color_map_xform;
 uniform float3 primary_change_color;
 uniform float3 secondary_change_color;
-uniform float4 primary_change_color_old : register(c190); // TODO Figure this one out
-uniform float4 secondary_change_color_old : register(c191); // TODO Figure this one out
+
 uniform float3 tertiary_change_color;
 uniform float3 quaternary_change_color;
 
@@ -95,6 +98,9 @@ uniform xform2d bump_detail_mask_map_xform;
 -------------------------------------------------- END BUMP MAPPING
 */
 
+uniform float4 primary_change_color_old : register(c190); // TODO Figure this one out
+uniform float4 secondary_change_color_old : register(c191); // TODO Figure this one out
+uniform float4 k_ps_active_camo_factor : register(c212);
 
 
 
