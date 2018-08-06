@@ -25,7 +25,7 @@ float3 bungie_color_processing(float3 color)
     return r2.xyz >= 0 ? r0.xyz : r1.xyz;
 }
 
-float4 export_low_frequency(float4 input)
+float4 export_high_frequency(float4 input)
 {
     float alpha = input.w;
     float3 color = input.xyz;
@@ -33,7 +33,7 @@ float4 export_low_frequency(float4 input)
     return float4(color / g_exposure.y, alpha * g_exposure.z);
 }
 
-float4 export_high_frequency(float4 input)
+float4 export_low_frequency(float4 input)
 {
     float alpha = input.w;
     float3 color = input.xyz;

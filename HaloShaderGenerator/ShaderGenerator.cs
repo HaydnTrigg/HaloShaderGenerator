@@ -20,9 +20,9 @@ namespace HaloShaderGenerator
                 //case ShaderStage.Static_Per_Pixel:
                 //case ShaderStage.Static_Per_Vertex:
                 //case ShaderStage.Static_Sh:
-                case ShaderStage.Static_Prt_Ambient:
-                case ShaderStage.Static_Prt_Linear:
-                case ShaderStage.Static_Prt_Quadratic:
+                //case ShaderStage.Static_Prt_Ambient:
+                //case ShaderStage.Static_Prt_Linear:
+                //case ShaderStage.Static_Prt_Quadratic:
                 //case ShaderStage.Dynamic_Light:
                 //case ShaderStage.Shadow_Generate:
                 case ShaderStage.Active_Camo:
