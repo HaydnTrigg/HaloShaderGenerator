@@ -157,5 +157,35 @@ namespace HaloShaderGenerator.DirectX
 
             return data;
         }
+
+        public static string Disassemble(byte[] bytecode)
+        {
+            D3D.ID3DBlob ppDisassembly = null;
+
+            var result = D3D.D3DDisassemble(bytecode, new UIntPtr((uint)bytecode.Length), 0, null, ref ppDisassembly);
+
+            if (result != 0)
+            {
+                //throw new Exception("Failed to disassembly shader");
+                return null;
+            }
+
+            string result_str = null;
+
+            if (ppDisassembly != null)
+            {
+                IntPtr pData = ppDisassembly.GetBufferPointer();
+                int iSize = ppDisassembly.GetBufferSize();
+
+                var data = new byte[iSize];
+                Marshal.Copy(pData, data, 0, data.Length);
+
+                Marshal.ReleaseComObject(ppDisassembly);
+
+                result_str = System.Text.Encoding.ASCII.GetString(data);
+            }
+
+            return result_str;
+        }
     }
 }

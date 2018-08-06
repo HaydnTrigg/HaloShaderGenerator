@@ -77,5 +77,14 @@ namespace HaloShaderGenerator.DirectX
             int flags2,
             ref ID3DBlob ppCode,
             ref ID3DBlob ppErrorMsgs);
+
+        [PreserveSig]
+        [DllImport("D3DCompiler_47.dll")]
+        public extern static int D3DDisassemble(
+            [In] byte[] pSrcData,
+            [In] UIntPtr SrcDataSize,
+            uint flags,
+            [MarshalAs(UnmanagedType.LPStr)] string szComments,
+            ref ID3DBlob ppDisassembly);
     }
 }

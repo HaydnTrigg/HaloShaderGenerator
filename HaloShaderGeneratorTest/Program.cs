@@ -1,4 +1,5 @@
-﻿using HaloShaderGenerator.Enums;
+﻿using HaloShaderGenerator.DirectX;
+using HaloShaderGenerator.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,16 +48,8 @@ namespace HaloShaderGenerator
 
         static int Main()
         {
-            Benchmark();
-
-            int size = 0;
-
-            foreach (var shaderstage in Enum.GetValues(typeof(ShaderStage)).Cast<ShaderStage>())
-            {
-                if (!ShaderGenerator.IsShaderStageSupported(shaderstage)) continue;
-
-                var bytecode = ShaderGenerator.Generate(
-                    shaderstage,
+            var bytecode = ShaderGenerator.Generate(
+                    ShaderStage.Active_Camo,
                     Albedo.Two_Change_Color,
                     Bump_Mapping.Off,
                     Alpha_Test.None,
@@ -71,10 +64,11 @@ namespace HaloShaderGenerator
                     Soft_fade.Off
                 );
 
-                size += bytecode.Length;
-            }
+            var str = D3DCompiler.Disassemble(bytecode);
 
-            return size;
+            Console.WriteLine(str);
+
+            return 0;
         }
     }
 }
