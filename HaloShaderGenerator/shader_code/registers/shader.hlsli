@@ -25,7 +25,15 @@ uniform float2 texture_size : register(c14);
 uniform float4 __unknown_c15 : register(c15);
 uniform float3 Camera_Position_PS : register(c16);
 uniform float simple_light_count : register(c17);
-uniform float4 simple_lights[40] : register(c18);
+struct SimpleLight
+{
+    float4 unknown0;
+    float4 unknown1;
+    float4 unknown2;
+    float4 unknown3;
+    float4 unknown4;
+};
+uniform SimpleLight simple_lights[8] : register(c18);
 
 /*
 This region here is where dynamically created uniforms are allowed

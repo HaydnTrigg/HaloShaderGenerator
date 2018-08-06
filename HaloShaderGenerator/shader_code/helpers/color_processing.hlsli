@@ -25,6 +25,11 @@ float3 bungie_color_processing(float3 color)
     return r2.xyz >= 0 ? r0.xyz : r1.xyz;
 }
 
+float3 expose_color(float3 input)
+{
+    return max(input * g_exposure.x, float3(0.0, 0.0, 0.0));
+}
+
 float4 export_high_frequency(float4 input)
 {
     float alpha = input.w;
