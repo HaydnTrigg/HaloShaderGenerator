@@ -81,7 +81,7 @@ PS_OUTPUT_DEFAULT entry_active_camo(VS_OUTPUT_ACTIVE_CAMO input) : COLOR
     return output;
 }
 
-#include "shader_satic_ptr_linear.hlsl"
+#include "shader_satic_ptr_ambient.hlsl"
 
 float4 entry_static_prt_linear(VS_OUTPUT_ALBEDO input) : COLOR
 {
