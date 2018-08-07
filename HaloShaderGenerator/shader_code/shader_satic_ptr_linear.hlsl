@@ -172,7 +172,10 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
                                 if (simple_light_count > 6)
                                 {
                                     accumulation = calculate_simple_light(simple_lights[6], accumulation, normal, relative_position);
-                                    accumulation = calculate_simple_light(simple_lights[7], accumulation, normal, relative_position);
+                                    if (simple_light_count > 7)
+                                    {
+                                        accumulation = calculate_simple_light(simple_lights[7], accumulation, normal, relative_position);
+                                    }
                                 }
                             }
                         }
