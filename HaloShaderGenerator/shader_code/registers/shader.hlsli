@@ -5,7 +5,7 @@
 
 // Not sure if these are all constant or not
 uniform bool no_dynamic_lights : register(b0);
-
+uniform bool actually_calc_albedo : register(b12);
 
 uniform float4 g_exposure : register(c0);
 uniform float4 p_lighting_constant_0 : register(c1);
@@ -22,7 +22,7 @@ uniform float4 __unknown_c11 : register(c11);
 uniform float4 __unknown_c12 : register(c12);
 uniform float4 __unknown_c13 : register(c13);
 uniform float2 texture_size : register(c14);
-uniform float4 __unknown_c15 : register(c15);
+uniform float4 dynamic_environment_blend : register(c15);
 uniform float3 Camera_Position_PS : register(c16);
 uniform float simple_light_count : register(c17);
 struct SimpleLight
@@ -65,6 +65,7 @@ uniform sampler detail_map;
 uniform xform2d detail_map_xform;
 
 uniform float4 debug_tint;
+uniform float4 env_tint_color;
 
 uniform sampler detail_map2;
 uniform xform2d detail_map2_xform;
@@ -108,6 +109,9 @@ uniform xform2d bump_detail_mask_map_xform;
 /*
 -------------------------------------------------- END BUMP MAPPING
 */
+
+samplerCUBE dynamic_environment_map_0;
+samplerCUBE dynamic_environment_map_1;
 
 uniform float4 primary_change_color_old : register(c190); // TODO Figure this one out
 uniform float4 secondary_change_color_old : register(c191); // TODO Figure this one out
