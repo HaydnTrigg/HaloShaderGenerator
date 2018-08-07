@@ -54,7 +54,7 @@ namespace HaloShaderGenerator
                 Bump_Mapping.Off,
                 Alpha_Test.None,
                 Specular_Mask.No_Specular_Mask,
-                Material_Model.None,
+                Material_Model.Diffuse_Only,
                 Environment_Mapping.None,
                 Self_Illumination.Off,
                 Blend_Mode.Opaque,

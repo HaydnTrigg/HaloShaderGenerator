@@ -5,7 +5,7 @@
 
 // Not sure if these are all constant or not
 uniform bool no_dynamic_lights : register(b0);
-uniform bool actually_calc_albedo : register(b12);
+//uniform bool actually_calc_albedo : register(b12); //NOTE: This is MS30
 
 uniform float4 g_exposure : register(c0);
 uniform float4 p_lighting_constant_0 : register(c1);

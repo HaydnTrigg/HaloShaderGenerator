@@ -104,5 +104,11 @@
   <ItemGroup>
     <EmbeddedResource Include="shader_code\helpers\color_processing.hlsli" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\shader_satic_ptr_ambient.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\helpers\input_output.hlsli" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

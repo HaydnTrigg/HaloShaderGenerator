@@ -138,7 +138,7 @@ namespace HaloShaderGenerator
             {
                 var method_name = method.ToString().ToLower();
 
-                macros.Add(new D3D.SHADER_MACRO { Name = $"{method_type_name}_{method_name}", Definition = ((int)method).ToString() });
+                macros.Add(new D3D.SHADER_MACRO { Name = $"k_{method_type_name}_{method_name}", Definition = ((int)method).ToString() });
             }
 
             return macros;

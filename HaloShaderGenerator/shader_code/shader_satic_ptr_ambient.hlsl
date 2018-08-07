@@ -70,6 +70,46 @@ float3 calculate_simple_light(SimpleLight simple_light, float3 previous_illumina
 }
 
 
+//TODO: This is poor mans templateing for the time being
+
+float4 material_type_diffuse_only(float2 frag_coord)
+{
+    return float4(0, 0, 0, 0);
+}
+
+//#ifndef material_type
+//#define material_type material_type_diffuse_only
+//#endif
+
+struct ALBEDO_PASS_RESULT
+{
+    float3 albedo;
+    float3 normal;
+};
+
+//NOTE: We don't really need this yet, but its there ready to support MS30
+ALBEDO_PASS_RESULT get_albedo_and_normal(float2 frag_coord)
+{
+    ALBEDO_PASS_RESULT result;
+    #define actually_calc_albedo false
+    if (actually_calc_albedo)
+    {
+
+    }
+    else
+    {
+        // Sample from texture
+        float4 albedo_texture_sample = tex2D(albedo_texture, frag_coord);
+        result.albedo = albedo_texture_sample.xyz;
+
+        float4 normal_texture_sample = tex2D(normal_texture, frag_coord);
+        result.normal = normalize(normal_texture_sample.xyz * 2.0 - 1.0);
+    }
+    return result;
+}
+
+
+
 
 PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) : COLOR
 {
@@ -89,11 +129,9 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
 
     float2 frag_coord = (vPos + 0.5) / texture_size;
     
-    float4 albedo_texture_sample = tex2D(albedo_texture, frag_coord);
-    float3 albedo = albedo_texture_sample.xyz;
-
-    float4 normal_texture_sample = tex2D(normal_texture, frag_coord);
-    float3 normal = normalize(normal_texture_sample.xyz * 2.0 - 1.0);
+    ALBEDO_PASS_RESULT albedo_and_normal = get_albedo_and_normal(frag_coord);
+    float3 albedo = albedo_and_normal.albedo;
+    float3 normal = albedo_and_normal.normal;
 
     // Matirx multiplications, on normals. Maybe a screen space normal? Dunno.
     float3 unknown;
