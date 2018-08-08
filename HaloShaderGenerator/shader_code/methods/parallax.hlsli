@@ -1,4 +1,7 @@
-﻿#include <helpers\math.hlsli>
+﻿#ifndef _PARALLAX_HLSLI
+#define _PARALLAX_HLSLI
+
+#include "../helpers/math.hlsli"
 
 void calc_parallax_off_ps()
 {
@@ -43,4 +46,6 @@ void calc_parallax_interpolated_vs()
 #endif
 #ifndef calc_parallax_vs
 #define calc_parallax_vs calc_parallax_off_vs
+#endif
+
 #endif

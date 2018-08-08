@@ -32,6 +32,16 @@ struct PS_OUTPUT_DEFAULT
 
 struct VS_OUTPUT_STATIC_PTR_AMBIENT
 {
+    // These are from VS_OUTPUT_ALBEDO
+    float4 TexCoord : TEXCOORD;
+    float4 TexCoord1 : TEXCOORD1;
+    float4 TexCoord2 : TEXCOORD2;
+    float4 TexCoord3 : TEXCOORD3;
+
+
+
+
+
     float4 vPos : VPOS;
     float4 TexCoord6 : TEXCOORD6;
     float4 TexCoord7 : TEXCOORD7;

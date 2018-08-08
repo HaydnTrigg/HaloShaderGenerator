@@ -51,18 +51,33 @@ namespace HaloShaderGenerator
             var bytecode = ShaderGenerator.Generate(
                 ShaderStage.Static_Prt_Ambient,
                 Albedo.Default,
-                Bump_Mapping.Off,
+                Bump_Mapping.Detail,
                 Alpha_Test.None,
-                Specular_Mask.No_Specular_Mask,
-                Material_Model.Diffuse_Only,
-                Environment_Mapping.None,
-                Self_Illumination.Off,
+                Specular_Mask.Specular_Mask_From_Diffuse,
+                Material_Model.Two_Lobe_Phong,
+                Environment_Mapping.Dynamic,
+                Self_Illumination.Simple,
                 Blend_Mode.Opaque,
                 Parallax.Off,
                 Misc.First_Person_Always,
                 Distortion.Off,
                 Soft_fade.Off
                 );
+            //var bytecode = ShaderGenerator.Generate(
+            //    ShaderStage.Static_Prt_Ambient,
+            //    Albedo.Default,
+            //    Bump_Mapping.Off,
+            //    Alpha_Test.None,
+            //    Specular_Mask.No_Specular_Mask,
+            //    Material_Model.Diffuse_Only,
+            //    Environment_Mapping.Dynamic,
+            //    Self_Illumination.Off,
+            //    Blend_Mode.Additive,
+            //    Parallax.Off,
+            //    Misc.First_Person_Always,
+            //    Distortion.Off,
+            //    Soft_fade.Off
+            //    );
 
             var str = D3DCompiler.Disassemble(bytecode);
 

@@ -155,9 +155,9 @@ namespace HaloShaderGenerator
             macros.Add(ShaderGeneratorBase.CreateMacro("shaderstage", stage, "shaderstage_"));
             macros.Add(ShaderGeneratorBase.CreateMacro("shadertype", stage, "shadertype_"));
 
-            macros.Add(ShaderGeneratorBase.CreateMacro("albedo_template_id", albedo, "albedo_"));
-            macros.Add(ShaderGeneratorBase.CreateMacro("material_model_template_id", material_model, "material_model_"));
-            macros.Add(ShaderGeneratorBase.CreateMacro("environment_mapping_template_id", environment_mapping, "environment_mapping_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("albedo_arg", albedo, "k_albedo_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("material_model_arg", material_model, "k_material_model_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("envmap_type_arg", environment_mapping, "k_environment_mapping_"));
 
             
 

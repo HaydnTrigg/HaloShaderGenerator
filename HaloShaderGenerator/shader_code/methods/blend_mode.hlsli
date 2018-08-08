@@ -1,4 +1,9 @@
-﻿#ifndef param_fade
+﻿#ifndef _BLEND_MODE_HLSLI
+#define _BLEND_MODE_HLSLI
+
+#include "../helpers/math.hlsli"
+
+#ifndef param_fade
 float fade = 1.0;
 #endif
 
@@ -69,5 +74,7 @@ float4 blend_type_inv_alpha_blend(float4 input)
 }
 
 #ifndef blend_type
-#define blend_type opaque
+#define blend_type blend_type_opaque
+#endif
+
 #endif

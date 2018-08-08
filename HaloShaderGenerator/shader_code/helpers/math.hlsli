@@ -1,6 +1,9 @@
 ﻿#ifndef _MATH_HLSLI
 #define _MATH_HLSLI
 
+//TODO This number is not 100% accurate
+#define PI 3.141592783708597
+
 #define RAND_COEFFICIENTS float3(12.9898, 78.233, 4.1414)
 
 float rand2(float2 co)

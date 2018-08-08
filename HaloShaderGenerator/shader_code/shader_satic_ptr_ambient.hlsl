@@ -1,6 +1,19 @@
 ﻿#include "registers/shader.hlsli"
 #include "helpers/input_output.hlsli"
+
+#include "methods/albedo.hlsli"
 #include "helpers/color_processing.hlsli"
+
+//TODO: These must be in the correct order for the registers to align, double check this
+#include "methods\bump_mapping.hlsli"
+#include "methods\alpha_test.hlsli"
+#include "methods\specular_mask.hlsli"
+#include "methods\material_model.hlsli"
+#include "methods\environment_mapping.hlsli"
+#include "methods\self_illumination.hlsli"
+#include "methods\blend_mode.hlsli"
+#include "methods\parallax.hlsli"
+#include "methods\misc.hlsli"
 
 float3 calculate_simple_light(SimpleLight simple_light, float3 previous_illumination, float3 normal, float3 relative_position)
 {
@@ -72,7 +85,7 @@ float3 calculate_simple_light(SimpleLight simple_light, float3 previous_illumina
 
 //TODO: This is poor mans templateing for the time being
 
-float4 material_type_diffuse_only(float2 frag_coord)
+float4 material_type_diffuse_only(float2 fragcoord)
 {
     return float4(0, 0, 0, 0);
 }
@@ -84,27 +97,51 @@ float4 material_type_diffuse_only(float2 frag_coord)
 struct ALBEDO_PASS_RESULT
 {
     float3 albedo;
+    float alpha;
     float3 normal;
 };
 
-//NOTE: We don't really need this yet, but its there ready to support MS30
-ALBEDO_PASS_RESULT get_albedo_and_normal(float2 frag_coord)
+#ifndef envmap_type_arg
+#define envmap_type_arg 0
+#endif
+#ifndef k_environment_mapping_custom_map_none
+#define k_environment_mapping_custom_map_none 0
+#endif
+
+// finally we have this crazy code!!!!
+float3 apply_debug_tint(float3 color)
 {
-    ALBEDO_PASS_RESULT result;
-    #define actually_calc_albedo false
-    if (actually_calc_albedo)
-    {
+    float debug_tint_factor = 4.595;
+    float3 negative_tinted_color = color * (-debug_tint_factor) + debug_tint.rgb;
+    float3 positive_color = color * debug_tint_factor;
+    return positive_color + negative_tinted_color * debug_tint.a;
+}
 
-    }
-    else
-    {
-        // Sample from texture
-        float4 albedo_texture_sample = tex2D(albedo_texture, frag_coord);
-        result.albedo = albedo_texture_sample.xyz;
 
-        float4 normal_texture_sample = tex2D(normal_texture, frag_coord);
-        result.normal = normalize(normal_texture_sample.xyz * 2.0 - 1.0);
+ALBEDO_PASS_RESULT get_albedo_and_normal(float2 fragcoord, float2 texcoord, float3 tangentspace_x, float3 tangentspace_y, float3 tangentspace_z)
+{
+    ALBEDO_PASS_RESULT result = (ALBEDO_PASS_RESULT) 0;
+    if (envmap_type_arg != k_environment_mapping_custom_map_none)
+    {
+        if (actually_calc_albedo)
+        {
+            float4 diffuse_and_alpha = calc_albedo_ps(texcoord);
+            result.albedo = apply_debug_tint(diffuse_and_alpha.xyz);
+            result.alpha = diffuse_and_alpha.w;
+            result.normal = calc_bumpmap_ps(tangentspace_x, tangentspace_y, tangentspace_z, texcoord);
+            return result;
+        }
     }
+
+    // default behavior
+    // Sample from texture
+    float4 albedo_texture_sample = tex2D(albedo_texture, fragcoord);
+    result.albedo = albedo_texture_sample.xyz;
+    result.alpha = albedo_texture_sample.w;
+
+    float4 normal_texture_sample = tex2D(normal_texture, fragcoord);
+    result.normal = normalize(normal_texture_sample.xyz * 2.0 - 1.0);
+
     return result;
 }
 
@@ -113,11 +150,18 @@ ALBEDO_PASS_RESULT get_albedo_and_normal(float2 frag_coord)
 
 PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) : COLOR
 {
+    // These are from albedo, not 100% sure if correct
+    float2 texcoord = input.TexCoord.xy;
+    float2 texcoord_tiled = input.TexCoord.zw;
+    float3 tangentspace_x = input.TexCoord3.xyz;
+    float3 tangentspace_y = input.TexCoord2.xyz;
+    float3 tangentspace_z = input.TexCoord1.xyz;
+
     PS_OUTPUT_DEFAULT output;
 
     //TODO: Clean this up
     float4 c11 = float4(0.5, 2, -1, 0.333333343);
-    float4 c12 = float4(0.318309873, 0, 9.99999975e-005, 0.0500000007);
+    float4 c12 = float4(0, 0, 9.99999975e-005, 0.0500000007);
     float4 c58 = float4(-1.02332795, 0.886227012, -0.85808599, 0.429042995);
 
     //TODO: Better name these, not 100% sure what they do yet
@@ -127,14 +171,14 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     float3 v3 = input.Color1.xyz;
     float2 vPos = input.vPos.xy;
 
-    float2 frag_coord = (vPos + 0.5) / texture_size;
+    float2 fragcoord = (vPos + 0.5) / texture_size;
     
-    ALBEDO_PASS_RESULT albedo_and_normal = get_albedo_and_normal(frag_coord);
+    ALBEDO_PASS_RESULT albedo_and_normal = get_albedo_and_normal(fragcoord, texcoord, tangentspace_x, tangentspace_y, tangentspace_z);
     float3 albedo = albedo_and_normal.albedo;
     float3 normal = albedo_and_normal.normal;
 
     // Matirx multiplications, on normals. Maybe a screen space normal? Dunno.
-    float3 unknown;
+    float3 unknown_normal;
     {
         float3 r1 = float3(0, 0, 0);
         float3 r4 = float3(0, 0, 0);
@@ -175,13 +219,13 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
         //mad r1.xyz, r4, -c58.w, r1
         r1.xyz = (r4 * (-c58.www) + r1.xyz).xyz;
         //mul r1.xyz, r1, c12.x
-        r1.xyz = (r1 * c12.xxx).xyz;
+        r1.xyz = r1.xyz / PI;
 
-        unknown = r1.xyz;
+        unknown_normal = r1.xyz;
     }
     
         // i think this is ambient lighting
-    float3 ambient = unknown * v1;
+    float3 ambient = unknown_normal * v1;
     float3 accumulation = ambient;
 
     if (!no_dynamic_lights)
@@ -223,7 +267,25 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
         }
     }
 
+    //TODO Figure out a better solution for this
+    float3 environment = float3(0, 0, 0);
+    if (envmap_type_arg != k_environment_mapping_custom_map_none)
+    {
+        //float4 dynamic_environment_map_0_sample = texCUBElod(dynamic_environment_map_0, float4(0, 0, 0, 0));
+        //float4 dynamic_environment_map_1_sample = texCUBElod(dynamic_environment_map_1, float4(0, 0, 0, 0));
+        float4 dynamic_environment_map_0_sample = texCUBE(dynamic_environment_map_0, normal);
+        float4 dynamic_environment_map_1_sample = texCUBE(dynamic_environment_map_1, normal);
+
+        environment = lerp(dynamic_environment_map_0_sample.xyz * float3(1, 0, 0), dynamic_environment_map_1_sample.xyz * float3(0, 0, 1), dynamic_environment_blend.xyz).xyz;
+        environment *= env_tint_color.xyz;
+
+    }
+    accumulation += environment;
+
     float3 color = albedo * accumulation * v2 + v3;
+
+    //color = color * 0.0001 + environment;
+
     float3 exposed_color = expose_color(color);
 
     output.LowFrequency = export_low_frequency(float4(exposed_color, 1.0));

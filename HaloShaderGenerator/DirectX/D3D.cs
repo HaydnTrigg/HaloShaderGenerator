@@ -45,8 +45,8 @@ namespace HaloShaderGenerator.DirectX
             IntPtr pInclude,
             [MarshalAs(UnmanagedType.LPStr)] string pEntrypoint,
             [MarshalAs(UnmanagedType.LPStr)] string pTarget,
-            int flags1,
-            int flags2,
+            uint flags1,
+            uint flags2,
             ref ID3DBlob ppCode,
             ref ID3DBlob ppErrorMsgs);
 
@@ -59,7 +59,7 @@ namespace HaloShaderGenerator.DirectX
             [MarshalAs(UnmanagedType.LPStr)] string pSourceName,
             [In, Out] SHADER_MACRO[] pDefines,
             IntPtr pInclude,
-            int Flags,
+            uint Flags,
             ref ID3DBlob ppCode,
             ref ID3DBlob ppErrorMsgs);
 
@@ -73,8 +73,8 @@ namespace HaloShaderGenerator.DirectX
             IntPtr pInclude,
             [MarshalAs(UnmanagedType.LPStr)] string pEntrypoint,
             [MarshalAs(UnmanagedType.LPStr)] string pTarget,
-            int flags1,
-            int flags2,
+            uint flags1,
+            uint flags2,
             ref ID3DBlob ppCode,
             ref ID3DBlob ppErrorMsgs);
 

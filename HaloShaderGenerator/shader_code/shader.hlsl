@@ -26,21 +26,15 @@ PS_OUTPUT_ALBEDO entry_albedo(VS_OUTPUT_ALBEDO input) : COLOR
     float3 tangentspace_y = input.TexCoord2.xyz;
     float3 tangentspace_z = input.TexCoord1.xyz;
     float3 unknown = input.TexCoord1.w;
-
-    float3 diffuse;
-    float alpha;
-	{
-        float4 diffuse_alpha = calc_albedo_ps(texcoord);
-        diffuse = diffuse_alpha.xyz;
-        alpha = diffuse_alpha.w;
-    }
-    diffuse = bungie_color_processing(diffuse);
     
+    float4 diffuse_and_alpha = calc_albedo_ps(texcoord);
     float3 normal = calc_bumpmap_ps(tangentspace_x, tangentspace_y, tangentspace_z, texcoord);
 
+    diffuse_and_alpha.xyz = bungie_color_processing(diffuse_and_alpha.xyz);
+
     PS_OUTPUT_ALBEDO output;
-    output.Diffuse = blend_type(float4(diffuse, alpha));
-    output.Normal = blend_type(float4(normal_export(normal), alpha));
+    output.Diffuse = blend_type(float4(diffuse_and_alpha));
+    output.Normal = blend_type(float4(normal_export(normal), diffuse_and_alpha.w));
     output.Unknown = unknown.xxxx;
     return output;
 }
@@ -54,7 +48,7 @@ PS_OUTPUT_DEFAULT entry_active_camo(VS_OUTPUT_ACTIVE_CAMO input) : COLOR
     float2 vpos = input.vPos.xy;
     float2 screen_location = vpos + 0.5; // half pixel offset
     float2 texel_size = float2(1.0, 1.0) / texture_size.xy;
-    float2 screen_coord = screen_location * texel_size; // converts to [0, 1] range
+    float2 fragcoord = screen_location * texel_size; // converts to [0, 1] range
 
     // I'm not sure what is happening here with these three
     // but I think its a depth value, and this is a kind of
@@ -67,7 +61,7 @@ PS_OUTPUT_DEFAULT entry_active_camo(VS_OUTPUT_ACTIVE_CAMO input) : COLOR
     // however, the aspect ratio is 16:9 multiplied by 4
     float2 unknown3 = input.TexCoord.xy * k_ps_active_camo_factor.yz / float2(64, 36);
 
-    float2 texcoord = unknown3 * unknown2 + screen_coord;
+    float2 texcoord = unknown3 * unknown2 + fragcoord;
 
     float4 sample = tex2D(scene_ldr_texture, texcoord);
     float3 color = sample.xyz;

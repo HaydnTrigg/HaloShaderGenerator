@@ -1,4 +1,7 @@
-﻿#include <helpers\math.hlsli>
+﻿#ifndef _SPECULAR_MASK_HLSLI
+#define _SPECULAR_MASK_HLSLI
+
+#include "../helpers/math.hlsli"
 
 float4 calc_specular_mask_no_specular_mask_ps(float3 diffuse)
 {
@@ -17,4 +20,6 @@ float4 calc_specular_mask_texture_ps(float3 diffuse)
 
 #ifndef calc_specular_mask_ps
 #define calc_specular_mask_ps calc_specular_mask_no_specular_mask_ps
+#endif
+
 #endif

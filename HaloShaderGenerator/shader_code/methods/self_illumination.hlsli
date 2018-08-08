@@ -1,4 +1,7 @@
-﻿#include <helpers\math.hlsli>
+﻿#ifndef _SELF_ILLUMINATION_HLSLI
+#define _SELF_ILLUMINATION_HLSLI
+
+#include "../helpers/math.hlsli"
 
 float4 calc_self_illumination_none_ps(float3 diffuse)
 {
@@ -49,4 +52,6 @@ float4 calc_self_illumination_simple_with_alpha_mask_ps(float3 diffuse)
 
 #ifndef calc_self_illumination_ps
 #define calc_self_illumination_ps calc_self_illumination_none_ps
+#endif
+
 #endif

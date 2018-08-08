@@ -86,12 +86,17 @@ namespace HaloShaderGenerator
 
             string shader_source = include.ReadResource(template);
 
+            D3DCompiler.D3DCOMPILE flags = 0;
+#if DEBUG
+            flags |= D3DCompiler.D3DCOMPILE.D3DCOMPILE_WARNINGS_ARE_ERRORS;
+#endif
+
             byte[] shader_code = D3DCompiler.Compile(
                 shader_source,
                 entry,
                 version,
                 macros.ToArray(),
-                0,
+                flags,
                 0,
                 template,
                 include
