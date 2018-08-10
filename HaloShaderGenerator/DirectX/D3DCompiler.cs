@@ -10,6 +10,7 @@ namespace HaloShaderGenerator.DirectX
 {
     public static class D3DCompiler
     {
+        [Flags]
         public enum D3DCOMPILE : UInt32
         {
             //Directs the compiler to insert debug file/line/type/symbol information into the output code.

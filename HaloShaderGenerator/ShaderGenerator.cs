@@ -110,6 +110,9 @@ namespace HaloShaderGenerator
                     return null;
             }
 
+            // prevent the definition helper from being included
+            macros.Add(new D3D.SHADER_MACRO { Name = "_DEFINITION_HELPER_HLSLI", Definition = "1" });
+
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<ShaderStage>());
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<ShaderType>());
             macros.AddRange(ShaderGeneratorBase.CreateMethodEnumDefinitions<Albedo>());
@@ -156,10 +159,10 @@ namespace HaloShaderGenerator
             macros.Add(ShaderGeneratorBase.CreateMacro("shadertype", stage, "shadertype_"));
 
             macros.Add(ShaderGeneratorBase.CreateMacro("albedo_arg", albedo, "k_albedo_"));
-            macros.Add(ShaderGeneratorBase.CreateMacro("material_model_arg", material_model, "k_material_model_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("self_illumination_arg", self_illumination, "k_self_illumination_"));
+            macros.Add(ShaderGeneratorBase.CreateMacro("material_type_arg", material_model, "k_material_model_"));
             macros.Add(ShaderGeneratorBase.CreateMacro("envmap_type_arg", environment_mapping, "k_environment_mapping_"));
-
-            
+            macros.Add(ShaderGeneratorBase.CreateMacro("blend_type_arg", blend_mode, "k_blend_mode_"));
 
             var shader_bytecode = ShaderGeneratorBase.GenerateSource(template, macros, "entry_" + stage.ToString().ToLower(), "ps_3_0");
             return shader_bytecode;

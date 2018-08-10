@@ -110,5 +110,8 @@
   <ItemGroup>
     <EmbeddedResource Include="shader_code\helpers\input_output.hlsli" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\helpers\definition_helper.hlsli" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

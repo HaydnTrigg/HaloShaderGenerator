@@ -4,6 +4,7 @@
 #include "../helpers/types.hlsli"
 #include "../helpers/math.hlsli"
 #include "../helpers/bumpmap_math.hlsli"
+#include "../registers/shader.hlsli"
 
 float3 calc_bumpmap_off_ps(
 	float3 tangentspace_x,
@@ -11,7 +12,7 @@ float3 calc_bumpmap_off_ps(
 	float3 tangentspace_z,
 	float2 texcoord
 ) {
-	return tangentspace_z;
+    return normal_transform(tangentspace_x, tangentspace_y, tangentspace_z, float3(0, 0, 1));
 }
 
 float3 calc_bumpmap_default_ps(

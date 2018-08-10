@@ -46,8 +46,8 @@ float3 normal_transform(
 	float3 normal
 )
 {
-    float3 src_normal = normalize(normal);
-    float3 surface_normal = tangentspace_x * src_normal.x + tangentspace_y * src_normal.y + tangentspace_z * src_normal.z;
+    //TODO: normal may need to be pre normalized
+    float3 surface_normal = tangentspace_x * normal.x + tangentspace_y * normal.y + tangentspace_z * normal.z;
     float3 result = normalize(surface_normal);
 
     return result;
