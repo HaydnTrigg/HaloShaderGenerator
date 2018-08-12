@@ -14,7 +14,15 @@ float4 calc_self_illumination_none_ps(SELF_ILLUM_ARGS)
 
 float4 calc_self_illumination_simple_ps(SELF_ILLUM_ARGS)
 {
-	return float4(0.0, 0.0, 0.0, 0.0);
+    float4 self_illum_map_sample = tex2D(self_illum_map, apply_xform2d(texcoord, self_illum_map_xform));
+
+    float3 illum_color = self_illum_map_sample.rgb;
+
+    illum_color *= self_illum_color.rgb;
+    illum_color *= self_illum_intensity;
+    illum_color *= g_alt_exposure.x;
+
+    return float4(illum_color, self_illum_map_sample.w);
 }
 
 float4 calc_self_illumination_three_channel_ps(SELF_ILLUM_ARGS)
@@ -35,70 +43,29 @@ float4 calc_self_illumination_plasma_ps(SELF_ILLUM_ARGS)
     float4 noise_map_b_sample = tex2D(noise_map_b, apply_xform2d(texcoord, noise_map_b_xform));
 
     float noise = 1.0 - abs(noise_map_a_sample.x - noise_map_b_sample.x);
-    
+    float log_noise = log(noise);
 
+    float noise_wide = exp(log_noise * thinness_wide);
+    float noise_medium = exp(log_noise * thinness_medium);
+    float noise_sharp = exp(log_noise * thinness_sharp);
 
-    
-    float4 c69 = thinness_medium;
-    float4 c70 = thinness_sharp;
-    float4 c71 = thinness_wide;
-
-
-    float4 c66 = color_medium;
-    float4 c67 = color_sharp;
-    float4 c68 = color_wide;
-
-    
-    
-    //log r0.w, r0.w
-    noise = log(noise);
-    //mul r1.x, r0.w, c71.x
-    //exp r1.x, r1.x
-    float a = exp(noise * thinness_wide);
-    //mul r1.y, r0.w, c69.x
-    //exp r1.y, r1.y
-    float b = exp(noise * thinness_medium.x);
-    //add r1.x, -r1.y, r1.x
-    float c = a - b;
-    //mul r0.w, r0.w, c70.x
-    //exp r0.w, r0.w
-    float d = exp(noise * thinness_sharp.x);
-    //add r1.y, -r0.w, r1.y
-    float e = b - d;
-
+    // These three noise components represent the full [0-1] range
+    float noise_wide_to_medium = noise_wide - noise_medium;
+    float noise_medium_to_sharp = noise_medium - noise_sharp;
+    float noise_sharp_to_zero = noise_sharp - 0.0;
 
     float3 color = float3(0, 0, 0);
-
-
-    //mul r2.xyz, c67.w, c67
-    //mul r2.xyz, r0.w, r2
-    color = (color_sharp.rgb * c67.w) * d;
-    //mul r4.xyz, c66.w, c66
-    //mad r2.xyz, r4, r1.y, r2
-    color += (color_medium.rgb * color_medium.w) * e;
-    //mul r4.xyz, c68.w, c68
-    //mad r1.xyz, r4, r1.x, r2
-    color += (color_wide.rgb * c68.w) * c;
-    color = color * alpha_mask_map_sample.a; // apply alpha mask
-
     
+    color = color_sharp.rgb * color_sharp.a * noise_sharp_to_zero;
+    color += color_medium.rgb * color_medium.a * noise_medium_to_sharp;
+    color += color_wide.rgb * color_wide.a * noise_wide_to_medium;
 
-    float4 test = alpha_mask_map_sample + noise_map_a_sample + noise_map_b_sample;
-    test += color_medium;
-    test += color_sharp;
-    test += color_wide;
-    test += thinness_medium;
-    test += thinness_sharp;
-    test += thinness_wide;
-    test= float4(0,0, clamp(test.x, 0.0, 0.0001), 1.0);
-
-    //float3 color = (c * e).xxx;
-    //color = bungie_color_processing(color);
+    color *= alpha_mask_map_sample.a; // apply alpha mask
     color *= self_illum_intensity;
     color *= g_alt_exposure.x;
 
-    return float4(test.xyz + color.rgb, 1.0);
-
+    // not 100% sure about alpha yet
+    return float4(color.rgb, 1.0);
 }
 
 float4 calc_self_illumination_from_albedo_ps(SELF_ILLUM_ARGS)

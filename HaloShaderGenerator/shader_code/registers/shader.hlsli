@@ -5,7 +5,13 @@
 #include "../helpers/definition_helper.hlsli"
 
 // Not sure if these are all constant or not
-uniform bool no_dynamic_lights : register(b0);
+
+uniform bool use_material_texture;
+uniform bool no_dynamic_lights;
+uniform bool order3_area_specular;
+
+//uniform bool no_dynamic_lights : register(b0);
+//bool use_material_texture : register(b0); // INVESTIGATE
 
 #if blend_type_arg != k_blend_mode_opaque
 uniform bool actually_calc_albedo : register(b12);
@@ -53,6 +59,12 @@ Not entirely sure where this ends
 uniform sampler2D scene_ldr_texture;
 uniform sampler2D albedo_texture;
 uniform sampler2D normal_texture;
+uniform sampler2D material_texture;
+
+// not 100% sure if these are in correct spot
+uniform sampler2D g_sampler_cc0236;
+uniform sampler2D g_sampler_dd0236;
+uniform sampler2D g_sampler_c78d78;
 
 uniform float4 albedo_color;
 uniform float4 albedo_color2;
@@ -154,10 +166,33 @@ uniform float area_specular_contribution;
 uniform float analytical_specular_contribution;
 uniform float environment_map_specular_contribution;
 
-uniform boolf order3_area_specular; // bool order3_area_specular; this is weird, its a bool sitting in a constant register?????? 
+//TODO: Figure out location of this
+//uniform boolf order3_area_specular; // bool order3_area_specular; this is weird, its a bool sitting in a constant register?????? 
 
 uniform float normal_specular_power;
 uniform float3 normal_specular_tint;
+
+
+
+// START
+
+float4 material_texture_xform;
+float3 fresnel_color;
+float fresnel_power;
+float roughness;
+float albedo_blend;
+float3 specular_tint;
+bool albedo_blend_with_specular_tint;
+float rim_fresnel_coefficient;
+float3 rim_fresnel_color;
+float rim_fresnel_power;
+float rim_fresnel_albedo_blend;
+
+// END
+
+
+
+
 
 uniform float glancing_specular_power;
 uniform float3 glancing_specular_tint;
@@ -174,6 +209,39 @@ uniform samplerCUBE dynamic_environment_map_1;
 uniform float4 primary_change_color_old : register(c190); // TODO Figure this one out
 uniform float4 secondary_change_color_old : register(c191); // TODO Figure this one out
 uniform float4 k_ps_active_camo_factor : register(c212);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

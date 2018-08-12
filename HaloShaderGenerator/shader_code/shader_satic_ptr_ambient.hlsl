@@ -116,9 +116,7 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
     float3 environment = envmap_type(eye_world, normal);
     float4 self_illumination = calc_self_illumination_ps(texcoord, albedo);
 
-    //float3 color = albedo * (accumulation * v2 + environment) + unknown_vertex_color1;
-
-    float3 color = (material_lighting + environment) * v2 + self_illumination.xyz;
+    float3 color = (environment + self_illumination.xyz) * v2 + material_lighting;
 
     float3 exposed_color = expose_color(color);
 

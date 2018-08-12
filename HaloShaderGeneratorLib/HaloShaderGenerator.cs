@@ -134,4 +134,6 @@ namespace HaloShaderGenerator
             return result;
         }
     }
+
+
 }
