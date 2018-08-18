@@ -6,12 +6,9 @@
 
 // Not sure if these are all constant or not
 
-uniform bool use_material_texture;
-uniform bool no_dynamic_lights;
-uniform bool order3_area_specular;
-
-//uniform bool no_dynamic_lights : register(b0);
-//bool use_material_texture : register(b0); // INVESTIGATE
+bool use_material_texture;
+bool order3_area_specular;
+bool no_dynamic_lights;
 
 #if blend_type_arg != k_blend_mode_opaque
 uniform bool actually_calc_albedo : register(b12);

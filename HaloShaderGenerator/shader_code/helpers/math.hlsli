@@ -2,7 +2,7 @@
 #define _MATH_HLSLI
 
 //TODO This number is not 100% accurate
-#define PI 3.141592783708597
+#define PI 3.141592653589793238462643383279
 
 #define RAND_COEFFICIENTS float3(12.9898, 78.233, 4.1414)
 

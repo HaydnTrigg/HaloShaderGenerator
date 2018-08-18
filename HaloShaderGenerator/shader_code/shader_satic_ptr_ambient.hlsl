@@ -112,11 +112,13 @@ PS_OUTPUT_DEFAULT entry_static_prt_ambient(VS_OUTPUT_STATIC_PTR_AMBIENT input) :
 
     float3 eye_world = normalize(fragment_world_position);
     
-    float3 material_lighting = material_type(albedo, normal, unknown_vertex_color1, fragment_world_position, unknown_vertex_value0);
+    float3 material_lighting = material_type(albedo, normal, eye_world, texcoord, unknown_vertex_color1, fragment_world_position, unknown_vertex_value0);
     float3 environment = envmap_type(eye_world, normal);
     float4 self_illumination = calc_self_illumination_ps(texcoord, albedo);
 
     float3 color = (environment + self_illumination.xyz) * v2 + material_lighting;
+
+    color = overwrite(color, material_lighting);
 
     float3 exposed_color = expose_color(color);
 
