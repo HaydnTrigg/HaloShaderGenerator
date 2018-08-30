@@ -53,6 +53,10 @@
       <Project>{ac09cce8-ca0b-403a-9d9d-6eb56fab289c}</Project>
       <Name>HaloShaderGeneratorLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HaloShaderGenerator\HaloShaderGenerator.csproj">
+      <Project>{17bfeffb-1619-4647-ba40-3cd1d87fd774}</Project>
+      <Name>HaloShaderGenerator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

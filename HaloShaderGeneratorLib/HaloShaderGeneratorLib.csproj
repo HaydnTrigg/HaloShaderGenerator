@@ -56,4 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd $(SolutionDir)
+xcopy HaloShaderGeneratorLib\bin\$(ConfigurationName)\HaloShaderGeneratorLib.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\Tools\ /Y
+xcopy HaloShaderGeneratorLib\bin\$(ConfigurationName)\HaloShaderGeneratorLib.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\TagTool\bin\x64\Debug\ /Y
+xcopy HaloShaderGeneratorLib\bin\$(ConfigurationName)\HaloShaderGeneratorLib.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\TagTool\bin\x64\Release\ /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -71,15 +71,16 @@ namespace HaloShaderGenerator
         {
             if (!IsBaseDLLLoaded) return false;
 
+            Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
+
+            if (shadergeneratortype == null) return false;
+
             switch (type)
             {
                 case ShaderType.Shader:
-                    Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
-                    if (shadergeneratortype != null)
-                    {
-                        return (dynamic)shadergeneratortype.GetMethod("IsShaderStageSupported").Invoke(null, new object[] { stage });
-                    }
-                    return false;
+                    return (dynamic)shadergeneratortype.GetMethod("IsShaderStageSupported").Invoke(null, new object[] { stage });
+                case ShaderType.Cortana:
+                    return (dynamic)shadergeneratortype.GetMethod("IsShaderCortanaStageSupported").Invoke(null, new object[] { stage });
                 case ShaderType.Beam:
                 case ShaderType.Contrail:
                 case ShaderType.Decal:
@@ -115,7 +116,7 @@ namespace HaloShaderGenerator
 
             if (shadergeneratortype == null) return null;
 
-            dynamic result = shadergeneratortype.GetMethod("Generate").Invoke(null, new object[] {
+            dynamic result = shadergeneratortype.GetMethod("GenerateShader").Invoke(null, new object[] {
                     stage,
                     albedo,
                     bump_mapping,
@@ -133,6 +134,24 @@ namespace HaloShaderGenerator
 
             return result;
         }
+
+        public static byte[] GenerateShaderCortana(
+            ShaderStage stage
+            )
+        {
+            if (!IsBaseDLLLoaded) return null;
+
+            Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
+
+            if (shadergeneratortype == null) return null;
+
+            dynamic result = shadergeneratortype.GetMethod("GenerateShaderCortana").Invoke(null, new object[] {
+                    stage
+            });
+
+            return result;
+        }
+
     }
 
 

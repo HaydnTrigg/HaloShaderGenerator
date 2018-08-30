@@ -15,6 +15,7 @@ namespace HaloShaderGenerator.Enums
         Halogram,
         LightVolume,
         Particle,
-        Terrain
+        Terrain,
+        Cortana
     }
 }

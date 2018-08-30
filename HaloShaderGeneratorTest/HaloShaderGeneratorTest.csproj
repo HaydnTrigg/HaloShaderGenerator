@@ -61,7 +61,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cd $(SolutionDir)
+xcopy HaloShaderGeneratorLib\bin\$(ConfigurationName)\HaloShaderGeneratorLib.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\Tools\ /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

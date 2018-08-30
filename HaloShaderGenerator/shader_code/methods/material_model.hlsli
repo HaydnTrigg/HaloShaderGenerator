@@ -96,11 +96,17 @@ float3 material_type_cook_torrance(MATERIAL_TYPE_ARGS)
 
     color = specular_color;
 
-    float n_dot_l = dot(normal, k_ps_dominant_light_direction.xyz);
+    float n_dot_l = dot(normal, -normalize(k_ps_dominant_light_direction.xyz));
     float n_dot_v = dot(normal, eye_world);
 
     color = min(n_dot_l, n_dot_v).xxx;
-    color = n_dot_v.xxx;
+    color = n_dot_l.xxx;
+
+
+
+
+
+
 
 
 
@@ -125,7 +131,6 @@ float3 material_type_cook_torrance(MATERIAL_TYPE_ARGS)
     {
         garbage += tex2D(g_sampler_cc0236, float2(0, 0));
     }
-
     garbage += diffuse_coefficient.x;
     garbage += specular_coefficient.x;
     garbage += area_specular_contribution.x;
@@ -144,10 +149,8 @@ float3 material_type_cook_torrance(MATERIAL_TYPE_ARGS)
     garbage += analytical_anti_shadow_control;
     garbage += k_ps_dominant_light_direction.x;
     garbage += k_ps_dominant_light_intensity.x;
-
     garbage += tex2D(albedo_texture, float2(0, 0));
     garbage += tex2D(normal_texture, float2(0, 0));
-
     return color + float3(clamp(garbage.x, 0, 0.0001), 0, 0);
     return material_type_diffuse_only(MATERIAL_TYPE_ARGNAMES);
 }

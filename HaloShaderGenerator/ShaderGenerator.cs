@@ -35,6 +35,16 @@ namespace HaloShaderGenerator
             return false;
         }
 
+        public static bool IsShaderCortanaStageSupported(ShaderStage stage)
+        {
+            switch (stage)
+            {
+                case ShaderStage.Active_Camo:
+                    return true;
+            }
+            return false;
+        }
+
         public static Task<byte[]> GenerateAsync(
             ShaderStage stage,
             Albedo albedo,
@@ -51,7 +61,7 @@ namespace HaloShaderGenerator
             Soft_fade soft_fade
             )
         {
-            return Task.Run<byte[]>(() => Generate(
+            return Task.Run(() => GenerateShader(
                 stage,
                 albedo,
                 bump_mapping,
@@ -68,7 +78,7 @@ namespace HaloShaderGenerator
             ));
         }
 
-        public static byte[] Generate(
+        public static byte[] GenerateShader(
             ShaderStage stage,
             Albedo albedo,
             Bump_Mapping bump_mapping,
@@ -163,6 +173,29 @@ namespace HaloShaderGenerator
             macros.Add(ShaderGeneratorBase.CreateMacro("material_type_arg", material_model, "k_material_model_"));
             macros.Add(ShaderGeneratorBase.CreateMacro("envmap_type_arg", environment_mapping, "k_environment_mapping_"));
             macros.Add(ShaderGeneratorBase.CreateMacro("blend_type_arg", blend_mode, "k_blend_mode_"));
+
+            var shader_bytecode = ShaderGeneratorBase.GenerateSource(template, macros, "entry_" + stage.ToString().ToLower(), "ps_3_0");
+            return shader_bytecode;
+        }
+
+        public static byte[] GenerateShaderCortana(
+            ShaderStage stage
+            )
+        {
+            string template = $"shader_cortana.hlsl";
+
+            List<D3D.SHADER_MACRO> macros = new List<D3D.SHADER_MACRO>();
+
+            switch (stage)
+            {
+                case ShaderStage.Active_Camo:
+                    break;
+                default:
+                    return null;
+            }
+
+            // prevent the definition helper from being included
+            macros.Add(new D3D.SHADER_MACRO { Name = "_DEFINITION_HELPER_HLSLI", Definition = "1" });
 
             var shader_bytecode = ShaderGeneratorBase.GenerateSource(template, macros, "entry_" + stage.ToString().ToLower(), "ps_3_0");
             return shader_bytecode;

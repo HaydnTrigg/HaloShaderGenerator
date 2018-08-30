@@ -105,7 +105,7 @@
     <EmbeddedResource Include="shader_code\helpers\color_processing.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="shader_code\shader_satic_ptr_ambient.hlsl" />
+    <EmbeddedResource Include="shader_code\shader_satic_prt_ambient.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="shader_code\helpers\input_output.hlsli" />
@@ -116,5 +116,14 @@
   <ItemGroup>
     <EmbeddedResource Include="shader_code\helpers\lighting.hlsli" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="shader_code\shader_cortana.hlsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd $(SolutionDir)
+xcopy HaloShaderGenerator\bin\$(ConfigurationName)\HaloShaderGenerator.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\Tools\ /Y
+xcopy HaloShaderGenerator\bin\$(ConfigurationName)\HaloShaderGenerator.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\TagTool\bin\x64\Debug\ /Y
+xcopy HaloShaderGenerator\bin\$(ConfigurationName)\HaloShaderGenerator.dll C:\Users\me\MEGAsync\Documents\GitHub\TagTool\TagTool\bin\x64\Release\ /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
