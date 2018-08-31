@@ -41,8 +41,8 @@ namespace HaloShaderGenerator
 
             if (active_camo_support)
             {
-                var bytecode = HaloShaderGenerator.GenerateShaderCortana(ShaderStage.Active_Camo);
-                size += bytecode?.Length ?? 0;
+                var result = HaloShaderGenerator.GenerateShaderCortana(ShaderStage.Active_Camo);
+                size += result?.Bytecode?.Length ?? 0;
             }
 
             return size;

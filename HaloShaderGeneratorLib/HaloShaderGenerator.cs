@@ -1,77 +1,21 @@
 ﻿using HaloShaderGenerator.Enums;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HaloShaderGenerator
 {
+
     public static class HaloShaderGenerator
     {
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetModuleHandle(string lpModuleName);
-
-        private static bool IsDllLoaded(string path)
-        {
-            return GetModuleHandle(path) != IntPtr.Zero;
-        }
-
-        private static Assembly _HaloShaderGeneratorAssembly = null;
-        private static Assembly HaloShaderGeneratorAssembly
-        {
-            get
-            {
-                if (_HaloShaderGeneratorAssembly != null) return _HaloShaderGeneratorAssembly;
-
-                var haloshadergenerator = "HaloShaderGenerator.dll";
-                if (!IsDllLoaded(haloshadergenerator))
-                {
-                    var local_path = Path.GetFullPath(haloshadergenerator);
-                    if (File.Exists(local_path))
-                    {
-                        _HaloShaderGeneratorAssembly = Assembly.LoadFile(local_path);
-                        return _HaloShaderGeneratorAssembly;
-                    }
-
-                    var process = Process.GetCurrentProcess(); // Or whatever method you are using
-                    string fullPath = process.MainModule.FileName;
-
-                    var relative_to_process_path = Path.Combine(Path.GetDirectoryName(fullPath), haloshadergenerator);
-                    if (File.Exists(relative_to_process_path))
-                    {
-                        _HaloShaderGeneratorAssembly = Assembly.LoadFile(relative_to_process_path);
-                        return _HaloShaderGeneratorAssembly;
-                    }
-
-                    return null;
-                }
-                return null;
-            }
-        }
-
-        private static bool IsBaseDLLLoaded
-        {
-            get
-            {
-                var haloshadergenerator = "HaloShaderGenerator.dll";
-                if (!IsDllLoaded(haloshadergenerator))
-                {
-                    return HaloShaderGeneratorAssembly != null;
-                }
-                return true;
-            }
-        }
-
+        
         public static bool IsShaderSuppored(ShaderType type, ShaderStage stage)
         {
-            if (!IsBaseDLLLoaded) return false;
+            if (!HaloShaderGeneratorPrivate.IsBaseDLLLoaded) return false;
 
-            Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
+            Type shadergeneratortype = HaloShaderGeneratorPrivate.HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
 
             if (shadergeneratortype == null) return false;
 
@@ -94,7 +38,7 @@ namespace HaloShaderGenerator
             return false;
         }
 
-        public static byte[] GenerateShader(
+        public static ShaderGeneratorResult GenerateShader(
             ShaderStage stage,
             Albedo albedo,
             Bump_Mapping bump_mapping,
@@ -110,13 +54,13 @@ namespace HaloShaderGenerator
             Soft_fade soft_fade
             )
         {
-            if (!IsBaseDLLLoaded) return null;
+            if (!HaloShaderGeneratorPrivate.IsBaseDLLLoaded) return null;
 
-            Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
+            Type shadergeneratortype = HaloShaderGeneratorPrivate.HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
 
             if (shadergeneratortype == null) return null;
 
-            dynamic result = shadergeneratortype.GetMethod("GenerateShader").Invoke(null, new object[] {
+            var result = (byte[])shadergeneratortype.GetMethod("GenerateShader").Invoke(null, new object[] {
                     stage,
                     albedo,
                     bump_mapping,
@@ -132,24 +76,28 @@ namespace HaloShaderGenerator
                     soft_fade
             });
 
-            return result;
+            if (result == null) return null;
+
+            return new ShaderGeneratorResult(result);
         }
 
-        public static byte[] GenerateShaderCortana(
+        public static ShaderGeneratorResult GenerateShaderCortana(
             ShaderStage stage
             )
         {
-            if (!IsBaseDLLLoaded) return null;
+            if (!HaloShaderGeneratorPrivate.IsBaseDLLLoaded) return null;
 
-            Type shadergeneratortype = HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
+            Type shadergeneratortype = HaloShaderGeneratorPrivate.HaloShaderGeneratorAssembly.ExportedTypes.Where(t => t.Name == "ShaderGenerator").FirstOrDefault();
 
             if (shadergeneratortype == null) return null;
 
-            dynamic result = shadergeneratortype.GetMethod("GenerateShaderCortana").Invoke(null, new object[] {
+            var result = (byte[])shadergeneratortype.GetMethod("GenerateShaderCortana").Invoke(null, new object[] {
                     stage
             });
 
-            return result;
+            if (result == null) return null;
+
+            return new ShaderGeneratorResult(result);
         }
 
     }

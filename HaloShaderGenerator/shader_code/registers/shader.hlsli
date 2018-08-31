@@ -7,14 +7,20 @@
 // Not sure if these are all constant or not
 
 bool use_material_texture;
-bool order3_area_specular;
-bool no_dynamic_lights;
+uniform bool order3_area_specular;
+uniform bool no_dynamic_lights;
 
 #if blend_type_arg != k_blend_mode_opaque
 uniform bool actually_calc_albedo : register(b12);
 #else
 #define actually_calc_albedo false
 #endif
+
+uniform bool dynamic_light_shadowing;
+uniform bool k_is_lightmap_exist;
+uniform bool k_is_water_interaction;
+
+uniform int layers_of_4;
 
 uniform float4 g_exposure : register(c0);
 uniform float4 p_lighting_constant_0 : register(c1);
@@ -34,6 +40,9 @@ uniform float2 texture_size : register(c14);
 uniform float4 dynamic_environment_blend : register(c15);
 uniform float3 Camera_Position_PS : register(c16);
 uniform float simple_light_count : register(c17);
+uniform float4 simple_lights[40] : register(c18);
+//uniform SimpleLight simple_lights[8] : register(c18);
+
 struct SimpleLight
 {
     float4 unknown0;
@@ -42,7 +51,16 @@ struct SimpleLight
     float4 unknown3;
     float4 unknown4;
 };
-uniform SimpleLight simple_lights[8] : register(c18);
+SimpleLight get_simple_light(int index)
+{
+    SimpleLight light;
+    light.unknown0 = simple_lights[index * 5 + 0];
+    light.unknown1 = simple_lights[index * 5 + 1];
+    light.unknown2 = simple_lights[index * 5 + 2];
+    light.unknown3 = simple_lights[index * 5 + 3];
+    light.unknown4 = simple_lights[index * 5 + 4];
+    return light;
+}
 
 /*
 This region here is where dynamically created uniforms are allowed

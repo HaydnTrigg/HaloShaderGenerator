@@ -28,28 +28,28 @@ float3 material_type_diffuse_only(MATERIAL_TYPE_ARGS)
 
         if (simple_light_count > 0)
         {
-            accumulation = calculate_simple_light(simple_lights[0], accumulation, normal, relative_position);
+            accumulation = calculate_simple_light(get_simple_light(0), accumulation, normal, relative_position);
             if (simple_light_count > 1)
             {
-                accumulation = calculate_simple_light(simple_lights[1], accumulation, normal, relative_position);
+                accumulation = calculate_simple_light(get_simple_light(1), accumulation, normal, relative_position);
                 if (simple_light_count > 2)
                 {
-                    accumulation = calculate_simple_light(simple_lights[2], accumulation, normal, relative_position);
+                    accumulation = calculate_simple_light(get_simple_light(2), accumulation, normal, relative_position);
                     if (simple_light_count > 3)
                     {
-                        accumulation = calculate_simple_light(simple_lights[3], accumulation, normal, relative_position);
+                        accumulation = calculate_simple_light(get_simple_light(3), accumulation, normal, relative_position);
                         if (simple_light_count > 4)
                         {
-                            accumulation = calculate_simple_light(simple_lights[4], accumulation, normal, relative_position);
+                            accumulation = calculate_simple_light(get_simple_light(4), accumulation, normal, relative_position);
                             if (simple_light_count > 5)
                             {
-                                accumulation = calculate_simple_light(simple_lights[5], accumulation, normal, relative_position);
+                                accumulation = calculate_simple_light(get_simple_light(5), accumulation, normal, relative_position);
                                 if (simple_light_count > 6)
                                 {
-                                    accumulation = calculate_simple_light(simple_lights[6], accumulation, normal, relative_position);
+                                    accumulation = calculate_simple_light(get_simple_light(6), accumulation, normal, relative_position);
                                     if (simple_light_count > 7)
                                     {
-                                        accumulation = calculate_simple_light(simple_lights[7], accumulation, normal, relative_position);
+                                        accumulation = calculate_simple_light(get_simple_light(7), accumulation, normal, relative_position);
                                     }
                                 }
                             }

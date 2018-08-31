@@ -49,8 +49,10 @@
     <Compile Include="Enums\ShaderStage.cs" />
     <Compile Include="Enums\ShaderType.cs" />
     <Compile Include="HaloShaderGenerator.cs" />
+    <Compile Include="HaloShaderGeneratorPrivate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\ShaderGenerator_Enums.cs" />
+    <Compile Include="ShaderGeneratorResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
