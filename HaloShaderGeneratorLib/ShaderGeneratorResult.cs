@@ -9,11 +9,12 @@ namespace HaloShaderGenerator
 {
     public class ShaderGeneratorResult
     {
+
         public class ShaderRegister
         {
             public ShaderRegister(string name, RegisterType type, int register, int size)
             {
-                Name = name;
+                Name = name.ToLower();
                 registerType = type;
                 Size = size;
                 Register = register;
@@ -24,7 +25,7 @@ namespace HaloShaderGenerator
             public string Name { get; }
             public RegisterType registerType { get; }
             public bool IsXFormArgument => Name.ToLower().Contains("_xform");
-            public ShaderRegisterScope Scope => GetScope(Name);
+            public ShaderRegisterScope Scope => GetScope();
 
 
             public enum ShaderRegisterScope
@@ -42,7 +43,8 @@ namespace HaloShaderGenerator
                 RenderMethodExternVector_Arguments,
                 UnknownF,
                 UnknownG,
-                UnknownH
+                UnknownH,
+                Indirect
             }
 
             public enum RegisterType
@@ -53,9 +55,9 @@ namespace HaloShaderGenerator
                 Sampler
             }
 
-            private static ShaderRegisterScope GetScope(string name)
+            private ShaderRegisterScope GetScope()
             {
-                switch (name)
+                switch (this.Name)
                 {
                     case "none":
                     case "texture_global_target_texaccum":
@@ -242,9 +244,25 @@ namespace HaloShaderGenerator
                     case "watercolor_texture_xform":
                     case "global_shape_texture_xform":
                         return ShaderRegisterScope.Vector_Arguments;
+                    case "g_exposure":
+                    case "k_ps_active_camo_factor":
+                    case "texture_size":
+                        return ShaderRegisterScope.Indirect;
                     default:
-                        Console.WriteLine($"Warning: Unknown ShaderRegisterScope for {name}");
-                        return ShaderRegisterScope.Vector_Arguments;
+                        Console.WriteLine($"Warning: Unknown ShaderRegisterScope for {this.Name}");
+                        switch(registerType)
+                        {
+                            case RegisterType.Boolean:
+                                return ShaderRegisterScope.Global_Arguments;
+                            case RegisterType.Sampler:
+                                return ShaderRegisterScope.TextureSampler_Arguments;
+                            case RegisterType.Vector:
+                                return ShaderRegisterScope.Vector_Arguments;
+                            case RegisterType.Integer:
+                                return ShaderRegisterScope.Integer_Arguments;
+                            default:
+                                throw new NotImplementedException();
+                        }
                 }
             }
         }

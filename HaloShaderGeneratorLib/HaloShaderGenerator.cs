@@ -10,7 +10,8 @@ namespace HaloShaderGenerator
 
     public static class HaloShaderGenerator
     {
-        
+        public static bool LibraryLoaded = HaloShaderGeneratorPrivate.HaloShaderGeneratorAssembly != null;
+
         public static bool IsShaderSuppored(ShaderType type, ShaderStage stage)
         {
             if (!HaloShaderGeneratorPrivate.IsBaseDLLLoaded) return false;

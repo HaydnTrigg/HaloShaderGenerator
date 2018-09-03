@@ -21,6 +21,11 @@ struct VS_OUTPUT_ACTIVE_CAMO
     float4 vPos : VPOS;
     float4 TexCoord : TEXCOORD0;
     float4 TexCoord1 : TEXCOORD1;
+    float4 TexCoord2 : TEXCOORD2;
+    float4 TexCoord3 : TEXCOORD3;
+    float4 TexCoord4 : TEXCOORD4;
+    float4 TexCoord5 : TEXCOORD5;
+    float4 TexCoord6 : TEXCOORD6;
 };
 
 struct PS_OUTPUT_DEFAULT
