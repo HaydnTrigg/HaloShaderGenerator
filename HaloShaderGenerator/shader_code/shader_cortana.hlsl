@@ -187,20 +187,14 @@ PS_OUTPUT_DEFAULT entry_active_camo(VS_OUTPUT_ACTIVE_CAMO input) : COLOR
     color -= detail_map_sample.x;
     color += albedo_color;
     color *= 0.00001;
-    color += 0.00001;
-    color *= 0.00001;
 
-    color += base_map_sample.rgb;
-    color += albedo_color.rgb * detail_map_sample.rgb;
+    float4 scene_ldr_texture_sample = tex2D(scene_ldr_texture, fragcoord);
 
-    //color += detail_map_sample;
+    color += scene_ldr_texture_sample.rgb;
+    color += base_map_sample.rgb + albedo_color.rgb * detail_map_sample.rgb;
+    alpha = base_map_sample.a * albedo_color.a;
 
-    //color += input.TexCoord.xyz;
 
-    //float4 sample = tex2D(scene_ldr_texture, fragcoord);
-    //color += sample.rgb * 0.00001;
-    //
-    alpha = base_map_sample.w;
 
 //    exec
 //    serialize

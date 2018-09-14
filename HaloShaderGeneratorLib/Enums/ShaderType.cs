@@ -16,6 +16,12 @@ namespace HaloShaderGenerator.Enums
         LightVolume,
         Particle,
         Terrain,
-        Cortana
+        Cortana,
+        Water,
+        Black,
+        Screen,
+        Custom,
+        Foliage,
+        ZOnly
     }
 }
